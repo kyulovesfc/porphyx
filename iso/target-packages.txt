@@ -1,0 +1,32 @@
+# Sistema instalado: solo repos oficiales de Arch (lo del AUR esta en aur-packages.txt).
+base
+linux
+linux-firmware
+sudo
+git
+base-devel
+networkmanager
+efibootmgr
+# GPU: iGPU AMD + dGPU NVIDIA (hibrido)
+mesa
+vulkan-radeon
+vulkan-icd-loader
+nvidia-open
+nvidia-utils
+lib32-nvidia-utils
+nvidia-prime
+libva-nvidia-driver
+switcheroo-control
+power-profiles-daemon
+upower
+# Audio y bluetooth
+pipewire
+pipewire-pulse
+wireplumber
+bluez
+bluez-utils
+# Sistema
+zram-generator
+fastfetch
+# Teclado (servicio keyd)
+keyd

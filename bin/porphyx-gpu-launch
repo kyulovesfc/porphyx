@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# porphyx-gpu-launch — wrapper para launch_apps_custom_command.
+# Si el estado es "on", antepone las vars de PRIME offload (OpenGL) al comando real.
+# Si es "off", además oculta el ICD de NVIDIA del loader Vulkan (VK_ICD_FILENAMES),
+# porque apps Vulkan-nativas (ej. Sober) ignoran las vars de PRIME/GLX y eligen
+# la dGPU por su cuenta si el loader se la deja ver.
+STATE=~/.local/state/porphyx/gpu-prime-state
+if [[ -f "$STATE" ]] && [[ "$(cat "$STATE")" == "on" ]]; then
+    exec env __NV_PRIME_RENDER_OFFLOAD=1 \
+             __GLX_VENDOR_LIBRARY_NAME=nvidia \
+             __VK_LAYER_NV_optimus=NVIDIA_only \
+             DRI_PRIME=1 \
+             "$@"
+else
+    ICDS=""
+    for f in /usr/share/vulkan/icd.d/*.json; do
+        case "$f" in *nvidia*|*hasvk*) continue;; esac
+        ICDS="${ICDS}${ICDS:+:}$f"
+    done
+    if [[ -n "$ICDS" ]]; then
+        exec env VK_ICD_FILENAMES="$ICDS" "$@"
+    else
+        exec "$@"
+    fi
+fi
