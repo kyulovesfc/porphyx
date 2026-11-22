@@ -7,10 +7,6 @@ config/foot/themes/
 config/noctalia/settings.toml
 
 # ISO: artefactos de build
-iso/repo/
 iso/work/
-iso/work-aur/
 iso/out/
 
-iso/mirror/
-iso/work-mirror/

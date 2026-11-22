@@ -1,4 +1,4 @@
-# Sistema instalado: solo repos oficiales de Arch (lo del AUR esta en aur-packages.txt).
+# Sistema instalado: solo repos oficiales de Arch (los paquetes del AUR los instala porphyx setup).
 base
 linux
 linux-firmware
