@@ -35,23 +35,11 @@ echo "== Tema de cursor =="
 pacman -Qi capitaine-cursors >/dev/null 2>&1 || sudo pacman -S --needed capitaine-cursors
 
 echo "== Config Noctalia =="
-if [ -f "$HOME/.config/noctalia/noctalia-full-config.toml" ]; then
-  echo "noctalia-full-config.toml presente: no se despliega config.toml del repo (los hooks van en el overlay zz-porphyx.toml)."
-else
-backup_and_copy "$REPO_DIR/config/noctalia/config.toml" "$HOME/.config/noctalia/config.toml"
-# Noctalia no expande ~ ni $HOME en el TOML: las rutas se resuelven aca,
-# sobre la copia desplegada. El archivo del repo queda portable.
-_cfg="$HOME/.config/noctalia/config.toml"
-sed -i "s|\"HOOK\"|\"$HOME/.config/noctalia/scripts/rgb-sync-hook.sh\"|g; s|/home/kyu/|$HOME/|g; s|\"HOME/|\"$HOME/|g" "$_cfg"
-# /home/kyu es placeholder solo si $HOME es otro; para el usuario kyu es la ruta real.
-_pat='HOOK\|"HOME/'
-[ "$HOME" = "/home/kyu" ] || _pat="$_pat\|/home/kyu"
-if grep -q "$_pat" "$_cfg"; then
-  echo "ERROR: quedaron placeholders sin sustituir en $_cfg" >&2
-  grep -n "$_pat" "$_cfg" >&2
-  exit 1
-fi
-echo "config.toml: rutas resueltas para $USER."
+# La config es noctalia-full-config.toml mas el overlay zz-porphyx.toml (se despliegan abajo).
+# Noctalia fusiona todos los *.toml de ~/.config/noctalia/: un config.toml suelto se mezclaria con la full-config.
+if [ -f "$HOME/.config/noctalia/config.toml" ]; then
+  echo "AVISO: ~/.config/noctalia/config.toml existe y Noctalia lo fusiona con noctalia-full-config.toml." >&2
+  echo "       Si es un resto de una instalacion anterior, muevelo fuera de esa carpeta (p. ej. a config.toml.old)." >&2
 fi
 
 # KYU-PALETTE-INSTALL

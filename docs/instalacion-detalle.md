@@ -27,7 +27,7 @@ Todo archivo que reemplaza se respalda como `archivo.bak.<timestamp>` antes de s
 - **Cursor**: paquete `capitaine-cursors`. El tema y el tamaño los gobierna
   `config/niri/cfg/cursor.kdl` (fuente única). En Umbriel el tema activo es
   `capitaine-cursors` (`config/umbriel/config.toml`); `cursor.kdl` es de niri y es legado.
-- **Noctalia**: `config.toml` completo (bar, dock, hooks, tema) + `kbd-color-sync.toml`
+- **Noctalia**: `noctalia-full-config.toml` (bar, dock, tema) + overlay `zz-porphyx.toml` (hooks) + `kbd-color-sync.toml`
   (sat=1.6 val=0.85).
 - **MangoHud**: paquete + `MangoHud.conf` + overrides para Sober y mcpelauncher si están
   instalados (Vulkan layer vía Flatpak).
@@ -55,16 +55,16 @@ su `sed` y su guardia que aborta si algo queda sin sustituir:
 
 | Placeholder | Archivos | Se reemplaza por |
 |---|---|---|
-| `"HOME/` | `noctalia/config.toml`, `noctalia/kbd-color-sync.toml` | `"$HOME/` |
+| `"HOME/` | `noctalia/zz-porphyx.toml`, `noctalia/kbd-color-sync.toml` | `"$HOME/` |
 | `=HOME/` | `MangoHud/MangoHud.conf` | `=$HOME/` |
-| `"HOOK"` | `noctalia/config.toml` | ruta a `rgb-sync-hook.sh` |
+| `"HOOK"` | `noctalia/zz-porphyx.toml` | ruta a `rgb-sync-hook.sh` |
 
-**Al editar estos archivos, nunca commitear rutas absolutas.** El `sed` de `config.toml`
-tiene además una red de seguridad (`s|/home/kyu/|$HOME/|g`) que los otros dos no tienen.
+**Al editar estos archivos, nunca commitear rutas absolutas.** `noctalia-full-config.toml`
+usa `/home/kyu/` como placeholder (`s|/home/kyu/|$HOME/|g`); los otros usan los de la tabla.
 
-Consecuencia para diagnóstico: un `diff` crudo entre `config/noctalia/config.toml` y
-`~/.config/noctalia/config.toml` siempre muestra estas líneas y no indica drift. Para
-comparar de verdad hay que normalizar primero con el mismo `sed` que aplica `install.sh`.
+Consecuencia para diagnóstico: un `diff` crudo entre `config/noctalia/noctalia-full-config.toml`
+y `~/.config/noctalia/noctalia-full-config.toml` siempre muestra estas líneas y no indica
+drift. Para comparar de verdad hay que normalizar primero con el mismo `sed` que aplica `install.sh`.
 
 Si se agrega un archivo nuevo con rutas, agregar las tres piezas: placeholder en el
 archivo, `sed` en `install.sh`, y `grep` que aborte.

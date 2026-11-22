@@ -154,8 +154,8 @@ probe() {
 
   head2 "Noctalia"
   command -v noctalia >/dev/null 2>&1 && ok "binario noctalia presente" || warn "no encontré 'noctalia' en PATH"
-  [[ -f "$HOME/.config/noctalia/config.toml" || -f "$HOME/.config/noctalia/noctalia-full-config.toml" ]] && ok "config desplegado" || warn "sin config de Noctalia en ~/.config/noctalia"
-  [[ -f "$REPO_DIR/config/noctalia/config.toml" ]] && ok "config del repo: $REPO_DIR/config/noctalia/config.toml" \
+  [[ -f "$HOME/.config/noctalia/noctalia-full-config.toml" ]] && ok "config desplegado" || warn "sin noctalia-full-config.toml en ~/.config/noctalia"
+  [[ -f "$REPO_DIR/config/noctalia/zz-porphyx.toml" ]] && ok "overlay del repo: $REPO_DIR/config/noctalia/zz-porphyx.toml" \
                                                    || warn "no detecté el repo (¿corriendo fuera de porphyx?)"
   id -nG | tr ' ' '\n' | grep -qx wheel && ok "estás en el grupo wheel" || die "no estás en 'wheel': las reglas udev/polkit no te servirían"
 }
@@ -223,8 +223,8 @@ install_desktop() {
 }
 
 install_hook() {
-  local deployed="$HOME/.config/noctalia/config.toml"
-  local repo="$REPO_DIR/config/noctalia/config.toml"
+  local deployed="$HOME/.config/noctalia/zz-porphyx.toml"
+  local repo="$REPO_DIR/config/noctalia/zz-porphyx.toml"
   local f
   for f in "$repo" "$deployed"; do
     [[ -f "$f" ]] || { warn "no existe $f — se omite"; continue; }
@@ -321,11 +321,11 @@ verify() {
   ok "sintaxis de los scripts correcta"
   # buscar el comando, no el nombre de la clave: un array vacío también matchea
   local n
-  n="$(cat "$HOME/.config/noctalia/config.toml" "$HOME/.config/noctalia/zz-porphyx.toml" 2>/dev/null | grep -c 'porphyx-power')"
+  n="$(grep -c 'porphyx-power' "$HOME/.config/noctalia/zz-porphyx.toml" 2>/dev/null)"
   if [[ "$n" -ge 2 ]]; then
     ok "los dos hooks presentes en el config desplegado"
   else
-    die "solo $n de 2 hooks en config.toml o zz-porphyx.toml — la sincronía no quedaría activa"
+    die "solo $n de 2 hooks en zz-porphyx.toml — la sincronía no quedaría activa"
   fi
   n="$(command ls "$HOME/.local/share/applications"/porphyx-*.desktop 2>/dev/null | wc -l)"
   [[ "$n" -ge 3 ]] && ok "$n entradas en el launcher" || warn "solo $n entradas .desktop"
@@ -344,7 +344,7 @@ uninstall_all() {
              /usr/lib/systemd/system-sleep/porphyx-power-resume \
              /etc/modprobe.d/porphyx-gpu-mode.conf
   sudo udevadm control --reload; sudo systemctl daemon-reload
-  warn "no toco /etc/porphyx/ ni los hooks del config.toml — quítalos a mano si quieres"
+  warn "no toco /etc/porphyx/ ni los hooks de zz-porphyx.toml — quítalos a mano si quieres"
   warn "los ventiladores siguen con tu última curva: corre 'porphyx-power reset' antes,"
   warn "o escribe 3 en pwm1_enable, para devolverlos al automático de fábrica"
   ok "desinstalado"

@@ -4,7 +4,7 @@ Dotfiles que `install.sh` despliega. Cada carpeta es un módulo independiente.
 
 | Carpeta | Contenido | Estado |
 |---|---|---|
-| `noctalia/` | `config.toml` y `kbd-color-sync.toml` del repo, `noctalia-full-config.toml` (la config completa activa, `install.sh` ya no la pisa), `zz-porphyx.toml` (overlay con hooks de GPU/RGB y comando de lanzamiento, se carga al final), `palettes/`, `scripts/` | Vigente |
+| `noctalia/` | `noctalia-full-config.toml` (la config completa), `kbd-color-sync.toml`, `zz-porphyx.toml` (overlay con hooks de GPU/RGB y comando de lanzamiento, se carga al final), `palettes/`, `scripts/` | Vigente |
 | `umbriel/` | `config.toml` de Umbriel (va a `~/.config/umbriel/`), `drm-asus.toml` y `effects/` (presets de animacion propios, como `workspace_wipe_rev`; van a `~/.config/umbriel/effects/`) | Vigente |
 | `foot/` | `foot.ini` | Vigente |
 | `zsh/` | `zshrc` y `p10k.zsh` | Vigente |
