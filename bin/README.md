@@ -8,7 +8,7 @@ Scripts que `install.sh` copia a `~/.local/bin`.
 | `mangohud-color-sync` | Sincroniza los colores de MangoHud con el accent de Noctalia. Lo dispara el mismo hook |
 | `porphyx-gpu-prime` | Estado de PRIME offload, dGPU física y gamer mode. Usa `gpu-setup/` para encender y apagar la dGPU |
 | `porphyx-gpu-launch` | Wrapper de `launch_apps_custom_command`: antepone las variables de PRIME offload cuando el estado es on |
-| `porphyx-gpu-flatpak-sync` | Aplica el estado de PRIME a los flatpaks con `flatpak override`, porque no heredan variables del host |
+| `porphyx-gpu-flatpak-sync` | Aplica el estado de PRIME a los flatpaks con `flatpak override`, porque no heredan variables del host. En ahorro oculta el ICD de NVIDIA a todos los flatpaks (`VK_LOADER_DRIVERS_DISABLE`) |
 | `porphyx-hwprobe` | Solo lectura: lista que mecanismos de GPU hibrida, perfiles de energia y ventiladores ofrece el equipo. Sirve en cualquier portatil. Uso: `porphyx-hwprobe` |
 | `porphyx-plugins` | Habilita una sola vez los 13 plugins de Noctalia del setup (la lista esta en el propio script). Lo lanza el hook `started` del overlay; deja un marcador en `~/.local/state/porphyx/` y reintenta en el siguiente arranque si Noctalia aun no responde |
 | `rotate-backups.sh` | Deja solo los N respaldos más recientes por archivo base. Uso: `rotate-backups.sh [N]` (por defecto 3) |

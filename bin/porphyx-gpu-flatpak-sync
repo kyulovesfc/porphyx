@@ -3,17 +3,23 @@
 # Flatpak no hereda env vars del host: hay que fijarlas con `flatpak override --env=`.
 #   on : variables de PRIME offload para TODOS los flatpaks (override global) y se
 #        libera el ICD de Vulkan en los flatpaks Vulkan-nativos.
-#   off: se quitan las variables y, en los Vulkan-nativos, se oculta el ICD de NVIDIA
-#        para que el loader no despierte la dGPU. La ruta es la de DENTRO del sandbox
-#        (radeon_icd.x86_64.json), no la del host.
+#   off: se quitan las variables y se oculta el ICD de NVIDIA para que el loader de Vulkan no
+#        despierte la dGPU:
+#        - en TODOS los flatpaks (override global): VK_LOADER_DRIVERS_DISABLE=*nvidia*, que no
+#          depende de rutas del sandbox y cubre apps instaladas despues (Steam, Heroic, Bottles...).
+#          Sin probar en hardware: un loader que no lo soporte lo ignora y queda como antes.
+#        - en VKAPPS (Vulkan-nativos conocidos): ademas VK_ICD_FILENAMES apuntando al ICD de Mesa.
+#          La ruta es la de DENTRO del sandbox (radeon_icd.x86_64.json), no la del host.
 set -uo pipefail
 STATE=~/.local/state/porphyx/gpu-prime-state
 VKAPPS=(org.vinegarhq.Sober)
 VARS=(__NV_PRIME_RENDER_OFFLOAD __GLX_VENDOR_LIBRARY_NAME __VK_LAYER_NV_optimus)
+VK_HIDE=VK_LOADER_DRIVERS_DISABLE
 if [[ -f "$STATE" ]] && [[ "$(cat "$STATE")" == "on" ]]; then
     flatpak override --user --env=__NV_PRIME_RENDER_OFFLOAD=1 \
         --env=__GLX_VENDOR_LIBRARY_NAME=nvidia \
         --env=__VK_LAYER_NV_optimus=NVIDIA_only 2>/dev/null
+    flatpak override --user --unset-env="$VK_HIDE" 2>/dev/null
     for app in "${VKAPPS[@]}"; do
         flatpak override --user --unset-env=VK_ICD_FILENAMES "$app" 2>/dev/null
     done
@@ -22,8 +28,9 @@ else
     for v in "${VARS[@]}"; do
         flatpak override --user --unset-env="$v" 2>/dev/null
     done
+    flatpak override --user --env="$VK_HIDE=*nvidia*" 2>/dev/null
     for app in "${VKAPPS[@]}"; do
         flatpak override --user --env=VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/radeon_icd.x86_64.json "$app" 2>/dev/null
     done
-    logger -t porphyx-gpu-flatpak-sync "PRIME off: ICD de NVIDIA oculto en flatpaks Vulkan"
+    logger -t porphyx-gpu-flatpak-sync "PRIME off: ICD de NVIDIA oculto en todos los flatpaks"
 fi
