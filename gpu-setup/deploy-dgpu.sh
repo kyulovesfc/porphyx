@@ -19,4 +19,5 @@ for m in "${MAP[@]}"; do
   echo "ok  $dst"
 done
 systemctl daemon-reload && systemctl enable porphyx-dgpu-boot.service && systemctl disable nvidia-powerd.service || { echo "ABORT: systemctl"; exit 1; }
+bash "$D/backlight-native.sh" || echo "AVISO: backlight-native.sh no pudo aplicar acpi_backlight=native (el brillo puede depender de la dGPU)"
 echo "DGPU DEPLOY OK"
