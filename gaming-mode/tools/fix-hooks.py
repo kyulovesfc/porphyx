@@ -99,9 +99,9 @@ def patch(path):
 
 home = os.path.expanduser("~")
 objetivos = [
-    os.path.join(home, "porphyx/config/noctalia/config.toml"),
-    os.path.join(home, ".config/noctalia/config.toml"),
+    os.path.join(home, "porphyx/config/noctalia/zz-porphyx.toml"),
+    os.path.join(home, ".config/noctalia/zz-porphyx.toml"),
 ]
 if not all(patch(p) for p in objetivos):
     sys.exit(1)
-print("\nlisto. revisa con:  grep -n porphyx-power ~/.config/noctalia/config.toml")
+print("\nlisto. revisa con:  grep -n porphyx-power ~/.config/noctalia/zz-porphyx.toml")
