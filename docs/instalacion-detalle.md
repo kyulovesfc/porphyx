@@ -31,7 +31,7 @@ Todo archivo que reemplaza se respalda como `archivo.bak.<timestamp>` antes de s
   (sat=1.6 val=0.85).
 - **MangoHud**: paquete + `MangoHud.conf` + overrides para Sober y mcpelauncher si están
   instalados (Vulkan layer vía Flatpak).
-- **Nautilus + papirus-icon-theme**: gestor de archivos e iconos; el recoloreo lo hace la plantilla `papirus-icons` de Noctalia.
+- **Luciole + papirus-icon-theme**: gestor de archivos e iconos; el recoloreo lo hace la plantilla `papirus-icons` de Noctalia.
 - **niri**: todos los `.kdl` de `config/niri/cfg/` + `config.kdl` (window-rules, blur).
 - **Zsh**: paquete + `cachyos-zsh-config` + zoxide + eza + `.zshrc`/`.p10k.zsh`, y cambia la
   shell por defecto del usuario (`chsh`, pide password del usuario).
