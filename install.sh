@@ -267,12 +267,12 @@ fi
 
 
 echo "== Umbriel (compositor principal) =="
-command -v paru >/dev/null 2>&1 || sudo pacman -S --needed --noconfirm paru
+need_paru() { command -v paru >/dev/null 2>&1 || sudo pacman -S --needed --noconfirm paru; }
 for pkg in umbriel-git xdg-desktop-portal-umbriel-git; do
   if pacman -Qi "$pkg" &>/dev/null; then
     echo "$pkg ya instalado, se omite."
   else
-    paru -S --needed --noconfirm --skipreview "$pkg"
+    need_paru; paru -S --needed --noconfirm --skipreview "$pkg"
   fi
 done
 backup_and_copy "$REPO_DIR/config/umbriel/config.toml" "$HOME/.config/umbriel/config.toml"
@@ -336,7 +336,7 @@ if [ ! -f "$HOME/.config/cava/config" ]; then
   [ -f "$HOME/.config/cava/config" ] || printf '[general]\n' > "$HOME/.config/cava/config"
 fi
 # KYU-LAVAT
-pacman -Qi lavat &>/dev/null || paru -S --needed --noconfirm --skipreview lavat
+pacman -Qi lavat &>/dev/null || { need_paru; paru -S --needed --noconfirm --skipreview lavat; }
 for f in "$REPO_DIR"/config/applications/porphyx-*.desktop; do
   backup_and_copy "$f" "$HOME/.local/share/applications/$(basename "$f")"
 done
