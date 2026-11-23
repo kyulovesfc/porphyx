@@ -9,6 +9,12 @@ die() { echo "ABORT: $*" >&2; exit 1; }
 [ "$(id -u)" -ne 0 ] || die "corre como tu usuario, no como root"
 command -v sudo >/dev/null 2>&1 || die "falta sudo"
 
+# sin preguntas: no mostrar PKGBUILD ni confirmar cada paquete, compilar con todos los nucores, sudo una sola vez
+export PORPHYX_ASSUME_YES="${PORPHYX_ASSUME_YES:-1}"
+export MAKEFLAGS="${MAKEFLAGS:--j$(nproc)}"
+sudo -v
+( while kill -0 "$$" 2>/dev/null; do sudo -n true; sleep 50; done ) &
+
 echo "== Red =="
 if ping -c1 -W5 archlinux.org >/dev/null 2>&1; then
   echo "ok"
