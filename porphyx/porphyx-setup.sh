@@ -27,9 +27,15 @@ echo "== Paquetes oficiales =="
 mapfile -t PKGS < <(sed "s/#.*//" "$HERE/official-packages.txt" | tr -s " \t" "\n" | grep -v "^$")
 sudo pacman -Syu --needed --noconfirm base-devel git less xdg-utils desktop-file-utils "${PKGS[@]}"
 
-echo "== AUR: Umbriel (el portal va primero: umbriel-git depende de el) =="
-bash "$HERE/aur-install.sh" xdg-desktop-portal-umbriel-git || die "xdg-desktop-portal-umbriel-git no se instalo; umbriel-git lo necesita"
-bash "$HERE/aur-install.sh" umbriel-git || die "umbriel-git no se instalo; sin el no hay sesion"
+echo "== Umbriel (repo precompilado [porphyx]; si falla, se compila del AUR) =="
+if ! grep -q '^\[porphyx\]' /etc/pacman.conf; then
+  printf '\n[porphyx]\nSigLevel = Optional TrustAll\nServer = https://github.com/kyulovesfc/porphyx/releases/download/repo\n' | sudo tee -a /etc/pacman.conf >/dev/null
+fi
+if ! sudo pacman -Sy --needed --noconfirm umbriel-git xdg-desktop-portal-umbriel-git; then
+  echo "AVISO: repo precompilado no disponible, se compila del AUR" >&2
+  bash "$HERE/aur-install.sh" xdg-desktop-portal-umbriel-git || die "xdg-desktop-portal-umbriel-git no se instalo; umbriel-git lo necesita"
+  bash "$HERE/aur-install.sh" umbriel-git || die "umbriel-git no se instalo; sin el no hay sesion"
+fi
 echo "== AUR: resto =="
 for p in oh-my-zsh-git zsh-theme-powerlevel10k-git lavat zen-browser-bin luciole-git; do
   bash "$HERE/aur-install.sh" "$p" || echo "AVISO: $p no se instalo" >&2
