@@ -368,6 +368,13 @@ for f in "$REPO_DIR"/config/applications/porphyx-*.desktop; do
 done
 update-desktop-database "$HOME/.local/share/applications" 2>/dev/null
 
+# FileManager1: Luciole sobre Nautilus. El .service del paquete tiene nombre incorrecto y el de Nautilus es del sistema;
+# el de usuario tiene prioridad en el bus de sesion.
+if [ -x /usr/bin/luciole ]; then
+  mkdir -p "$HOME/.local/share/dbus-1/services"
+  printf '[D-BUS Service]\nName=org.freedesktop.FileManager1\nExec=/usr/bin/luciole --file-manager-service\n' > "$HOME/.local/share/dbus-1/services/org.freedesktop.FileManager1.service"
+fi
+
 echo "== Scripts .local/bin =="
 mkdir -p "$HOME/.local/bin"
 for f in "$REPO_DIR"/bin/*; do
