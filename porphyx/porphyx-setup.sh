@@ -37,11 +37,6 @@ if ! sudo pacman -Sy --needed --noconfirm umbriel-git xdg-desktop-portal-umbriel
   bash "$HERE/aur-install.sh" umbriel-git || die "umbriel-git no se instalo; sin el no hay sesion"
 fi
 sudo pacman -S --needed --noconfirm luciole-git lavat oh-my-zsh-git zsh-theme-powerlevel10k-git || echo "AVISO: luciole-git/lavat no estan en el repo precompilado, se intentan del AUR" >&2
-echo "== Luciole: servicio D-Bus de FileManager1 =="
-S=/usr/share/dbus-1/services
-if [ -f "$S/dev.noctalia.luciole.FileManager1.service" ] && [ ! -f "$S/org.freedesktop.FileManager1.service" ]; then
-  sudo mv "$S/dev.noctalia.luciole.FileManager1.service" "$S/org.freedesktop.FileManager1.service"
-fi
 echo "== AUR: resto =="
 for p in oh-my-zsh-git zsh-theme-powerlevel10k-git lavat zen-browser-bin luciole-git; do
   bash "$HERE/aur-install.sh" "$p" || echo "AVISO: $p no se instalo" >&2
