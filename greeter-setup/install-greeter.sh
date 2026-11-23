@@ -15,6 +15,12 @@ sudo install -Dm644 "$(dirname "$0")/config.toml" /etc/greetd/config.toml
 echo "Corriendo setup del sistema para noctalia-greeter..."
 sudo /usr/share/noctalia-greeter/setup_greeter_system.sh
 
+echo "Keyring: desbloqueo con la contrasena de login (PAM de greetd)..."
+if ! grep -q pam_gnome_keyring /etc/pam.d/greetd; then
+  sudo cp -a /etc/pam.d/greetd /etc/pam.d/greetd.bak
+  printf 'auth       optional     pam_gnome_keyring.so\nsession    optional     pam_gnome_keyring.so auto_start\n' | sudo tee -a /etc/pam.d/greetd >/dev/null
+fi
+
 echo "Deshabilitando SDDM, habilitando greetd..."
 sudo systemctl disable --now sddm.service 2>/dev/null || true
 sudo systemctl enable greetd.service
