@@ -8,7 +8,7 @@ if [ -z "${PORPHYX_BG:-}" ]; then
 fi
 STATE="${XDG_STATE_HOME:-$HOME/.local/state}/porphyx"
 MARK="$STATE/plugins-enabled"
-PLUGINS=(noctalia/screen_recorder 8bury/lid-guard notoxus/media-island noctalia/world_clock icefish/phone-connect damian-ds7/battery-threshold tadomika_ari/config-swap nomadcxx/gamer-mode noctalia/translator cleboost/hotspot yocraft/web-launcher noctalia/timer kenn/keybind-cheatsheet)
+PLUGINS=(noctalia/screen_recorder 8bury/lid-guard notoxus/media-island noctalia/world_clock)
 [ -e "$MARK" ] && exit 0
 command -v noctalia >/dev/null 2>&1 || exit 0
 for _ in $(seq 1 60); do
