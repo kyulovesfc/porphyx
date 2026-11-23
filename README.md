@@ -15,7 +15,7 @@ es opcional y solo existe para ASUS TUF.
 | Compositor | Umbriel (Wayland, basado en wlroots) con `xdg-desktop-portal-umbriel` y efectos propios en `config/umbriel/effects/` |
 | Shell | Noctalia v5: barra, launcher, centro de control, OSD, bloqueo de sesión y 13 plugins que se habilitan en el primer arranque |
 | Login | greetd + noctalia-greeter |
-| Archivos | Nautilus con iconos Papirus. Luciole (AUR) también se instala y está por verificar |
+| Archivos | Luciole, con iconos Papirus |
 | Terminal | foot y zsh con oh-my-zsh, powerlevel10k, zoxide, eza y fzf |
 | Navegador | Zen Browser |
 | Extras | MangoHud, flatpak, cava, cmatrix, lavat, playerctl y el cursor capitaine |
@@ -73,7 +73,7 @@ Todo debe estar commiteado: `porphyx/porphyx` se toma de HEAD.
 |---|---|
 | `Mod+Return` | Terminal (foot) |
 | `Mod+Space` / `Mod+S` | Launcher / centro de control de Noctalia |
-| `Mod+B` / `Mod+E` | Zen Browser / Nautilus |
+| `Mod+B` / `Mod+E` | Zen Browser / Luciole |
 | `Mod+Alt+L` | Bloquear sesión |
 | `Mod+Q` | Cerrar ventana |
 | `Mod+Z` | Scratchpad de terminal |

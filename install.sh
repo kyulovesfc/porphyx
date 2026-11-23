@@ -127,23 +127,19 @@ else
   echo "Sin NVIDIA o sin mcpelauncher, se omite PRIME en flatpaks."
 fi
 
-echo "== Gestor de archivos (nautilus) + iconos Papirus =="
-# Revert del extinto file-manager-fix/ (Dolphin como inode/directory +
-# .desktop de Nautilus ocultos). Idempotente: no hace nada si nunca se corrió.
-rm -f "$HOME/.local/share/applications/org.gnome.Nautilus.desktop" \
-      "$HOME/.local/share/applications/nautilus-autorun-software.desktop"
-update-desktop-database "$HOME/.local/share/applications" 2>/dev/null || true
-if [ "$(xdg-mime query default inode/directory)" != "org.gnome.Nautilus.desktop" ]; then
-  xdg-mime default org.gnome.Nautilus.desktop inode/directory
-  if [ "$(xdg-mime query default inode/directory)" != "org.gnome.Nautilus.desktop" ]; then
-    echo "ERROR: inode/directory sigue en $(xdg-mime query default inode/directory)" >&2
-    exit 1
+echo "== Gestor de archivos (Luciole) + iconos Papirus =="
+LUC=dev.noctalia.luciole.desktop
+if [ -f "/usr/share/applications/$LUC" ]; then
+  if [ "$(xdg-mime query default inode/directory)" != "$LUC" ]; then
+    xdg-mime default "$LUC" inode/directory
+    echo "inode/directory apunta a Luciole."
+  else
+    echo "inode/directory ya en Luciole, se omite."
   fi
-  echo "inode/directory reapuntado a Nautilus."
 else
-  echo "inode/directory ya en Nautilus, se omite."
+  echo "AVISO: Luciole no esta instalado, no se cambia inode/directory." >&2
 fi
-for pkg in nautilus papirus-icon-theme; do
+for pkg in papirus-icon-theme; do
   if ! pacman -Qi "$pkg" &>/dev/null; then
     sudo pacman -S --needed --noconfirm "$pkg"
   else
