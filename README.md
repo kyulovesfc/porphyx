@@ -20,8 +20,8 @@ es opcional y solo existe para ASUS TUF.
 | Navegador | Zen Browser |
 | Extras | MangoHud, flatpak, cava, cmatrix, lavat, playerctl y el cursor capitaine |
 
-Umbriel, Luciole, Zen, lavat y los temas de zsh vienen del AUR y se compilan en el equipo. `porphyx setup`
-muestra cada PKGBUILD antes de compilar.
+Umbriel, Luciole, lavat, oh-my-zsh y powerlevel10k se instalan precompilados desde el repo pacman `[porphyx]`
+(release `repo` de GitHub, sin firmar): `porphyx setup` no compila nada. Solo Zen Browser viene del AUR (binario).
 
 ## Instalación
 
@@ -35,8 +35,8 @@ muestra cada PKGBUILD antes de compilar.
 porphyx setup
 ```
 
-Instala los paquetes oficiales y los del AUR, despliega los dotfiles (`install.sh`) y configura greetd.
-Pide sudo, y para cada paquete del AUR muestra el PKGBUILD (sal del visor con `q`) y pide confirmación.
+Instala los paquetes oficiales y los del repo `[porphyx]`, despliega los dotfiles (`install.sh`) y configura greetd.
+Pide sudo una vez. Si el repo precompilado no está disponible, cae al AUR y muestra cada PKGBUILD (sal del visor con `q`).
 Al terminar, reinicia: entras por el greeter de Noctalia a una sesión Umbriel.
 
 Variables opcionales: `PORPHYX_REPO` (dónde clonar; por defecto `~/porphyx`), `PORPHYX_AUR_CACHE`,
@@ -114,7 +114,7 @@ Más detalle en [`gpu-setup/`](gpu-setup/README.md) y [`gaming-mode/`](gaming-mo
 | Ruta | Qué es |
 |---|---|
 | [`install.sh`](install.sh) | Despliega los dotfiles y configura Umbriel, Noctalia y las apps. Lo llama `porphyx setup` |
-| `porphyx/` | Comando `porphyx`, `porphyx-setup.sh`, instalador de paquetes del AUR y listas de paquetes |
+| `porphyx/` | Comando `porphyx`, `porphyx-setup.sh`, instalador de respaldo del AUR y listas de paquetes |
 | `iso/` | Construcción de la ISO: perfil archiso, `porphyx-install`, branding |
 | [`config/`](config/README.md) | Dotfiles: Noctalia, Umbriel, foot, zsh, MangoHud, launcher (`config/niri` es legado) |
 | [`bin/`](bin/README.md) | Scripts que van a `~/.local/bin` |

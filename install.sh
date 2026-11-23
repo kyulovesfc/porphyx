@@ -178,7 +178,7 @@ command -v eza &>/dev/null || sudo pacman -S --needed --noconfirm eza
 backup_and_copy "$REPO_DIR/config/zsh/zshrc" "$HOME/.zshrc"
 backup_and_copy "$REPO_DIR/config/zsh/p10k.zsh" "$HOME/.p10k.zsh"
 if [ "$(basename "$SHELL")" != "zsh" ]; then
-  chsh -s "$(command -v zsh)" "$USER"
+  sudo chsh -s "$(command -v zsh)" "$USER"
   echo "shell cambiada a zsh -- toma efecto en el proximo login"
 else
   echo "zsh ya es la shell por defecto."
