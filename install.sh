@@ -76,6 +76,32 @@ backup_and_copy "$REPO_DIR/config/noctalia/kbd-color-sync.toml" "$HOME/.config/n
 sed -i "s|\"HOME/|\"$HOME/|g" "$HOME/.config/noctalia/kbd-color-sync.toml"
 grep -q '"HOME/' "$HOME/.config/noctalia/kbd-color-sync.toml" && { echo "ERROR: placeholder sin sustituir en kbd-color-sync.toml" >&2; exit 1; }
 
+# Pantalla de bloqueo compacta: el layout va por nombre de salida, se genera una entrada por monitor conectado.
+python3 - "$REPO_DIR/config/noctalia/lockscreen-widgets.toml" "$HOME/.config/noctalia/zz-lockscreen.toml" <<'GENEOF' || { echo "ERROR: no se pudo generar zz-lockscreen.toml" >&2; exit 1; }
+import glob, os, re, sys, tomllib
+tpl = open(sys.argv[1]).read()
+outs = []
+for d in sorted(glob.glob('/sys/class/drm/card*-*')):
+    try:
+        if open(d + '/status').read().strip() == 'connected':
+            outs.append(d.split('/')[-1].split('-', 1)[1])
+    except OSError:
+        pass
+outs = outs or ['eDP-1']
+i = tpl.index('    [lockscreen_widgets.widget.')
+head, body = tpl[:i], tpl[i:]
+parts, ids = [], []
+for n, o in enumerate(outs, 1):
+    cid = 'lockscreen-widget-%016d' % n
+    parts.append(body.replace('eDP-1', o).replace('lockscreen-widget-0000000000000001', cid))
+    ids += ['lockscreen-login-box@' + o, cid]
+head = re.sub(r'(?m)^widget_order = .*$', 'widget_order = [ ' + ', '.join('"%s"' % x for x in ids) + ' ]', head)
+out = head + ''.join(parts)
+tomllib.loads(out)
+os.makedirs(os.path.dirname(sys.argv[2]), exist_ok=True)
+open(sys.argv[2], 'w').write(out)
+GENEOF
+
 echo "== MangoHud (paquete + config) =="
 if ! pacman -Qi mangohud &>/dev/null; then
   sudo pacman -S --needed --noconfirm mangohud
