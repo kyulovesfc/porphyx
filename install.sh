@@ -45,8 +45,11 @@ fi
 # KYU-PALETTE-INSTALL
 # Paleta Kyu_Pallete y config completa de Noctalia (rutas /home/kyu resueltas a $HOME).
 # KYU-ASSETS
-# Carpeta de wallpapers en ~/.local/share/porphyx (no se toca ~/Pictures); el repo no trae imagenes.
-mkdir -p "$HOME/.local/share/porphyx/wallpapers"
+# Fondos y avatar en ~/Pictures/Wallpapers (ruta fija en ingles); las imagenes vienen en config/wallpapers.
+mkdir -p "$HOME/Pictures/Wallpapers"
+for f in "$REPO_DIR"/config/wallpapers/*; do
+  [ -e "$HOME/Pictures/Wallpapers/$(basename "$f")" ] || cp "$f" "$HOME/Pictures/Wallpapers/"
+done
 mkdir -p "$HOME/.config/noctalia/palettes"
 backup_and_copy "$REPO_DIR/config/noctalia/palettes" "$HOME/.config/noctalia/palettes"
 # KYU-NOCTALIA-TEMPLATES: plantilla palette-raw.conf (la lee el sync de RGB; sin ella noctalia falla al aplicar plantillas)
