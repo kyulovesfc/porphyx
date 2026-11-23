@@ -5,14 +5,6 @@ from pathlib import Path
 
 SRC = Path("/opt/porphyx")
 
-MOTD = (
-    "Porphyx Linux\n\n"
-    "Base instalada. Para instalar el escritorio (Umbriel, Noctalia, Luciole y greeter),\n"
-    "conectate a internet (nmtui) y ejecuta:\n\n"
-    "    porphyx setup\n\n"
-)
-
-
 class Plugin:
     def on_genfstab(self, installation):
         target = Path(installation.target)
@@ -21,7 +13,6 @@ class Plugin:
         shutil.copy2(SRC / "porphyx", bindir / "porphyx")
         (bindir / "porphyx").chmod(0o755)
         (target / "etc").mkdir(parents=True, exist_ok=True)
-        (target / "etc" / "motd").write_text(MOTD)
         issue = Path("/etc/issue")
         if issue.exists():
             shutil.copy2(issue, target / "etc" / "issue")
