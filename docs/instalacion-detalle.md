@@ -83,5 +83,5 @@ tocar el display manager del sistema, o dependen de contexto que varía por máq
 - `config/`: dotfiles (noctalia, niri, umbriel, foot, zsh, MangoHud)
 - `bin/`: scripts desplegados a `~/.local/bin`
 - `greeter-setup/`: greetd + noctalia-greeter
-- Imagenes: el repo no trae. `install.sh` crea `~/.local/share/porphyx/wallpapers/` y
-  `noctalia-full-config.toml` apunta ahi; el avatar queda vacio.
+- Imagenes: `config/wallpapers/` las trae; `install.sh` las copia a `~/Pictures/Wallpapers/` (sin pisar las
+  existentes) y `noctalia-full-config.toml` apunta ahi, avatar incluido.
