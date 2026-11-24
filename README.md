@@ -1,5 +1,24 @@
 # Porphyx Linux
 
+## Get the ISO
+
+Copy and paste this in any Linux terminal:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/kyulovesfc/porphyx/main/get-iso.sh | bash
+```
+
+It downloads `porphyx-latest-x86_64.iso` to `~/Downloads` and verifies its sha256.
+
+To write it straight to a USB stick (asks you to type BORRAR before erasing anything):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/kyulovesfc/porphyx/main/get-iso.sh | USB=/dev/sdX bash
+```
+
+Boot the stick and run `porphyx-install`.
+
+
 Arch Linux ligero con el entorno de Noctalia: compositor Wayland Umbriel, shell Noctalia v5, login con
 greetd y las apps básicas ya integradas. Se instala desde una ISO propia, en dos pasos: la base de Arch
 y `porphyx setup`.
