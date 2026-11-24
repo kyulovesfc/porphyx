@@ -157,10 +157,6 @@ color = "primary"
 enable_scroll = false
 type = "noctalia/world_clock:bar"
 
-[widget.bar_2]
-color = "primary"
-type = "noctalia/umbriel-companion:bar"
-
 [widget.battery]
 color = "primary"
 
@@ -186,11 +182,6 @@ artist_first = true
 color = "primary"
 hide_artist = false
 max_length = 500
-
-[widget.monitor]
-color = "primary"
-show_text = false
-type = "muhammadessam/umbriel-monitor-control:monitor"
 
 [widget.network]
 color = "primary"
