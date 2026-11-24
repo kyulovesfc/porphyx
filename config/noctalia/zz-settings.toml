@@ -1,0 +1,230 @@
+# Barra, widgets, tema y fondo de Kyu (generado desde settings.toml; lockscreen va en zz-lockscreen.toml).
+config_version = 20
+
+[bar]
+order = [ "default", "Utilities" ]
+
+    [bar.Utilities]
+    auto_hide = true
+    capsule_border = "primary_container"
+    capsule_fill = "primary"
+    capsule_foreground = "on_primary"
+    center = []
+    enabled = false
+    end = []
+    layer = "overlay"
+    margin_ends = 300
+    padding = 2
+    position = "right"
+    radius = 0
+    reserve_space = false
+    scale = 1.2500000111758709
+    show_on_workspace_switch = false
+    start = [
+        "spacer_3",
+        "network",
+        "spacer_3",
+        "bluetooth",
+        "spacer_3",
+        "volume",
+        "spacer_3",
+        "input_volume",
+        "spacer_3",
+        "brightness",
+        "spacer_3",
+        "notifications",
+        "spacer_3",
+        "bar_2",
+        "spacer_3",
+        "monitor",
+        "spacer_3",
+        "clipboard",
+        "spacer_3"
+    ]
+    thickness = 33
+
+    [bar.default]
+    center = [ "settings", "spacer_1", "clock", "spacer_1", "bar" ]
+    end = [ "battery", "spacer_1", "session", "spacer_1" ]
+    scale = 1.1000000089406967
+    start = [ "spacer_1", "workspaces", "spacer_1", "privacy", "spacer_1", "media", "spacer_1" ]
+
+[calendar]
+event_time_format = "{:%-I:%M:%S %p}"
+
+[[control_center.shortcuts]]
+type = "power_profile"
+
+[[control_center.shortcuts]]
+type = "8bury/lid-guard:lid-guard-toggle"
+
+[[control_center.shortcuts]]
+type = "caffeine"
+
+[[control_center.shortcuts]]
+type = "notification"
+
+[[control_center.shortcuts]]
+type = "noctalia/screen_recorder:toggle"
+
+[desktop_widgets]
+schema_version = 2
+widget_order = []
+
+    [desktop_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [desktop_widgets.widget]
+
+[dock]
+pinned = []
+
+[lockscreen]
+transition = [ "fade" ]
+
+[nightlight]
+enabled = false
+
+[notification]
+layer = "overlay"
+
+[osd]
+hide_delay_ms = 1000
+
+    [osd.kinds]
+    nightlight = false
+
+[plugin_settings."noctalia/world_clock"]
+text_size = "small"
+
+[plugin_settings."notoxus/media-island"]
+auto_show = false
+island_layer = "overlay"
+island_position = "bottom_left"
+preview_seconds = 1
+
+[plugins]
+enabled = [ "noctalia/screen_recorder", "8bury/lid-guard", "notoxus/media-island", "noctalia/world_clock" ]
+
+[shell]
+avatar_path = "/home/kyu/Pictures/Wallpapers/Porphyx_PFP.png"
+circular_avatar = false
+corner_radius_scale = 2.0
+password_style = "random"
+polkit_agent = true
+time_format = "{:%-I:%M:%S %p}"
+umbriel_audio_provider_enabled = true
+
+    [shell.launcher]
+    default_view = "categories"
+    show_navigation_labels = false
+    show_session_button = false
+    show_settings_button = false
+
+    [shell.screenshot]
+    remember_last_region = false
+
+[theme]
+builtin = "Noctalia"
+community_palette = "Oxocarbon"
+custom_palette = "Kyu_Pallete"
+mode = "dark"
+shell_mode = "dark"
+source = "custom"
+wallpaper_scheme = "dysfunctional"
+
+    [theme.templates]
+    builtin_ids = [ "btop", "cava", "foot", "luciole", "umbriel" ]
+    community_ids = [ "zen-browser", "discord", "vscode", "heroiclauncher", "thunar" ]
+
+[wallpaper]
+transition = [ "fade" ]
+
+    [wallpaper.default]
+    path = "/home/kyu/Pictures/Wallpapers/Porphyx_WPP.png"
+
+    [wallpaper.last]
+    path = "/home/kyu/Pictures/Wallpapers/Porphyx_WPP.png"
+
+[widget.audio_visualizer]
+bands = 128
+width = 404
+
+[widget.bar]
+color = "primary"
+enable_scroll = false
+type = "noctalia/world_clock:bar"
+
+[widget.bar_2]
+color = "primary"
+type = "noctalia/umbriel-companion:bar"
+
+[widget.battery]
+color = "primary"
+
+[widget.bluetooth]
+color = "primary"
+
+[widget.brightness]
+color = "primary"
+show_label = false
+
+[widget.clipboard]
+color = "primary"
+
+[widget.clock]
+color = "primary"
+
+[widget.input_volume]
+mute_color = "primary"
+show_label = false
+
+[widget.media]
+artist_first = true
+color = "primary"
+hide_artist = false
+max_length = 500
+
+[widget.monitor]
+color = "primary"
+show_text = false
+type = "muhammadessam/umbriel-monitor-control:monitor"
+
+[widget.network]
+color = "primary"
+
+[widget.notifications]
+color = "primary"
+
+[widget.privacy]
+inactive_color = "primary"
+
+[widget.session]
+color = "primary"
+
+[widget.settings]
+color = "primary"
+
+[widget.spacer_1]
+color = "primary"
+
+[widget.spacer_3]
+length = 30
+type = "spacer"
+
+[widget.sysmon]
+color = "primary"
+stat = "gpu_usage"
+
+[widget.volume]
+color = "primary"
+mute_color = "primary"
+show_label = false
+
+[widget.weather]
+color = "primary"
+
+[widget.workspaces]
+occupied_color = "primary_container"

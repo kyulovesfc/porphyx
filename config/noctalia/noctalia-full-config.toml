@@ -736,7 +736,7 @@ source = "custom"
 wallpaper_scheme = "dysfunctional"
 
     [theme.templates]
-    builtin_ids = [ "cava", "kitty", "niri", "umbriel" ]
+    builtin_ids = [ "cava", "kitty", "umbriel" ]
     community_ids = [ "zen-browser", "vscode" ]
     enable_builtin_templates = true
     enable_community_templates = true
