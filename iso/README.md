@@ -4,7 +4,7 @@ ISO de Arch (archiso) con `porphyx-install` (archinstall modificado, online). In
 kernel, firmware, red, drivers de GPU, audio y bluetooth. El escritorio no va en la ISO.
 
 Despues del primer reinicio, en la TTY: `porphyx setup` (ver `porphyx/`). Clona este repo y corre `install.sh`
-adaptado: Umbriel, Noctalia, Luciole y noctalia-greeter, con la GPU hibrida solo en ASUS TUF y preguntando.
+adaptado: Umbriel, Noctalia, Luciole y noctalia-greeter. En equipos ASUS instala ademas asusctl y rog-control-center.
 
 | Archivo | Que es |
 |---|---|
