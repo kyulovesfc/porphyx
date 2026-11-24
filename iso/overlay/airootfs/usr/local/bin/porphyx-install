@@ -3,6 +3,14 @@
 set -Eeuo pipefail
 [[ $EUID -eq 0 ]] || exec sudo "$0" "$@"
 setvtrgb /etc/porphyx-vtrgb 2>/dev/null || true
+# KYU-NET-CHECK: el instalador es online; si no hay red, ayuda a conectar antes de abrir archinstall
+if ! ping -c1 -W3 archlinux.org >/dev/null 2>&1; then
+  echo "Sin internet. Conectate para continuar."
+  if command -v nmtui >/dev/null 2>&1; then nmtui
+  elif command -v iwctl >/dev/null 2>&1; then echo "Wi-Fi: station wlan0 connect <red>   (salir: exit)"; iwctl
+  fi
+  ping -c1 -W5 archlinux.org >/dev/null 2>&1 || { echo "Sigue sin internet; el instalador es online. Abortando." >&2; exit 1; }
+fi
 G=$(python3 -c "import importlib.util as u; print(u.find_spec('archinstall').submodule_search_locations[0])")
 sed -i "s/title_text = 'Archlinux'/title_text = 'Porphyx Linux'/" "$G/scripts/guided.py" 2>/dev/null || true
 # KYU-KEYRING-WAIT: espera al keyring del live (pacman-init); ver drop-in de pacman-init
