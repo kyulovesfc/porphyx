@@ -70,6 +70,10 @@ if grep -q 'HOOK\|"HOME/' "$HOME/.config/noctalia/zz-porphyx.toml"; then
   exit 1
 fi
 
+# Barra, widgets, tema y fondo (Noctalia fusiona los *.toml de ~/.config/noctalia/; zz- se carga al final).
+backup_and_copy "$REPO_DIR/config/noctalia/zz-settings.toml" "$HOME/.config/noctalia/zz-settings.toml"
+sed -i "s|/home/kyu/|$HOME/|g" "$HOME/.config/noctalia/zz-settings.toml"
+
 backup_and_copy "$REPO_DIR/config/environment.d/10-path.conf" "$HOME/.config/environment.d/10-path.conf"
 
 backup_and_copy "$REPO_DIR/config/noctalia/kbd-color-sync.toml" "$HOME/.config/noctalia/kbd-color-sync.toml"
