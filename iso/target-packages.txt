@@ -16,6 +16,15 @@ nvidia-utils
 lib32-nvidia-utils
 nvidia-prime
 libva-nvidia-driver
+opencl-nvidia
+lib32-opencl-nvidia
+nvidia-settings
+egl-wayland
+nvtop
+mesa-utils
+lib32-mesa
+lib32-vulkan-radeon
+lib32-vulkan-icd-loader
 switcheroo-control
 power-profiles-daemon
 upower
