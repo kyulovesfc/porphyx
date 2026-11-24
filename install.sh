@@ -138,28 +138,6 @@ else
   echo "Ni Sober ni mcpelauncher están instalados, se omite."
 fi
 
-echo "== PRIME offload en flatpaks (extension GL de NVIDIA) =="
-if command -v nvidia-smi &>/dev/null && flatpak info io.mrarm.mcpelauncher &>/dev/null; then
-  DRV=$(nvidia-smi --query-gpu=driver_version --format=csv,noheader | tr "." "-")
-  if [ -z "$DRV" ]; then echo "ERROR: no se pudo leer driver_version" >&2; exit 1; fi
-  flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-  # La extension debe coincidir EXACTO con el driver del host; si no, flatpak no monta
-  # el GL de NVIDIA dentro del sandbox y ninguna env var de PRIME tiene efecto.
-  flatpak install -y flathub "org.freedesktop.Platform.GL.nvidia-$DRV" \
-                            "org.freedesktop.Platform.GL32.nvidia-$DRV"
-  if ! flatpak list --runtime | grep -q "GL.nvidia-$DRV"; then
-    echo "ERROR: falta org.freedesktop.Platform.GL.nvidia-$DRV tras el install" >&2; exit 1
-  fi
-  # device=all: --device=dri NO expone /dev/nvidia*, que el offload necesita.
-  flatpak override --user io.mrarm.mcpelauncher \
-    --device=all \
-    --env=__NV_PRIME_RENDER_OFFLOAD=1 \
-    --env=__GLX_VENDOR_LIBRARY_NAME=nvidia \
-    --env=__VK_LAYER_NV_optimus=NVIDIA_only
-else
-  echo "Sin NVIDIA o sin mcpelauncher, se omite PRIME en flatpaks."
-fi
-
 echo "== Gestor de archivos (Luciole) + iconos Papirus =="
 LUC=dev.noctalia.luciole.desktop
 if [ -f "/usr/share/applications/$LUC" ]; then
@@ -259,44 +237,11 @@ fi
 
 systemctl --user daemon-reload
 
-# KYU-GPU-ASK
-# Solo en Porphyx (PORPHYX=1): la parte de GPU hibrida es WIP y solo se ofrece en ASUS TUF.
-GPU_SETUP=si
-if [ -n "${PORPHYX:-}" ]; then
-  GPU_SETUP=no
-  _pn=$(cat /sys/class/dmi/id/product_name 2>/dev/null || true)
-  if [[ "$_pn" == *TUF* ]] && [ -d /sys/devices/platform/asus-nb-wmi ]; then
-    echo "== GPU hibrida (ASUS TUF, WIP) =="
-    echo "Ahorro de la dGPU y PRIME offload."
-    if [ -n "${PORPHYX_GPU:-}" ]; then _r="$PORPHYX_GPU"
-    elif [ -r /dev/tty ]; then read -r -p "Instalar la parte de GPU hibrida ahora? [s/N] " _r </dev/tty
-    else _r=n; fi
-    case "$_r" in s|S|y|Y|si) GPU_SETUP=si ;; esac
-  else
-    echo "GPU hibrida: solo disponible en ASUS TUF por ahora (WIP), se omite."
-  fi
-fi
-
-# dGPU: sesion siempre arranca en ahorro (estado offload off, gamer mode off).
-# Encendido en caliente al conectar AC (hooks battery_*) o con Mod+Alt+G.
-backup_and_copy "$REPO_DIR/config/systemd-user/porphyx-gpu-boot.service" "$HOME/.config/systemd/user/porphyx-gpu-boot.service"
-systemctl --user daemon-reload
-if [ "$GPU_SETUP" = si ]; then systemctl --user enable porphyx-gpu-boot.service; fi
-
-# Zen con EGL de Mesa: sin esto su proceso de video abre la NVIDIA y bloquea el apagado.
-backup_and_copy "$REPO_DIR/config/applications/zen.desktop" "$HOME/.local/share/applications/zen.desktop"
-update-desktop-database "$HOME/.local/share/applications" 2>/dev/null || true
-
-# Apagado fisico de la dGPU (solo laptops ASUS con dgpu_disable). Requiere root.
-if [ "$GPU_SETUP" = si ] && [[ -e /sys/devices/platform/asus-nb-wmi/dgpu_disable ]]; then
-    sudo "$REPO_DIR/gpu-setup/deploy-dgpu.sh" || echo "AVISO: deploy-dgpu.sh fallo"
-fi
 # ASUS: perfiles, ventiladores y firmware con asusctl + rog-control-center
 # (asusd es static: lo activa una regla udev, no hay que habilitarlo)
 if [ -d /sys/devices/platform/asus-nb-wmi ]; then
     sudo pacman -S --needed --noconfirm asusctl rog-control-center || echo "AVISO: no pude instalar asusctl / rog-control-center"
 fi
-
 
 echo "== Umbriel (compositor principal) =="
 need_paru() { command -v paru >/dev/null 2>&1 || sudo pacman -S --needed --noconfirm paru; }
@@ -308,13 +253,9 @@ for pkg in umbriel-git xdg-desktop-portal-umbriel-git; do
   fi
 done
 backup_and_copy "$REPO_DIR/config/umbriel/config.toml" "$HOME/.config/umbriel/config.toml"
-if [[ -e /sys/devices/platform/asus-nb-wmi/dgpu_disable ]]; then
-  backup_and_copy "$REPO_DIR/config/umbriel/drm-asus.toml" "$HOME/.config/umbriel/drm.toml"
-else
-  # KYU-UMBRIEL-INCLUDES
-  # Umbriel invalida la config si falta un include y hay politica [drm]: se deja un drm.toml vacio.
-  printf '# sin politica DRM propia (no es un portatil ASUS)\n' > "$HOME/.config/umbriel/drm.toml"
-fi
+# KYU-UMBRIEL-INCLUDES
+# Umbriel invalida la config si falta un include y hay politica [drm]: drm.toml queda vacio.
+printf '# sin politica DRM propia\n' > "$HOME/.config/umbriel/drm.toml"
 mkdir -p "$HOME/.config/umbriel/effects"
 cp -a "$REPO_DIR/config/umbriel/effects/." "$HOME/.config/umbriel/effects/"
 # outputs.toml y noctalia.toml van en [include.optional], pero sin ellos la validacion falla; Noctalia reescribe noctalia.toml.

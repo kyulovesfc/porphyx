@@ -1,9 +1,0 @@
-[Unit]
-Description=Porphyx: dGPU en ahorro al iniciar sesion
-PartOf=niri.service umbriel.service
-After=niri.service umbriel.service
-[Service]
-Type=oneshot
-ExecStart=%h/.local/bin/porphyx-gpu-prime boot
-[Install]
-WantedBy=niri.service umbriel.service

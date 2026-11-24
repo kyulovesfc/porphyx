@@ -1,4 +1,4 @@
-# Porphyx overlay: hooks de GPU/RGB. Se carga al final (zz-) y solo pisa lo que declara.
+# Porphyx overlay: hooks de RGB. Se carga al final (zz-) y solo pisa lo que declara.
 [hooks]
 battery_charging = []
 battery_discharging = []
@@ -21,7 +21,6 @@ wifi_enabled = []
 
 
 [shell]
-launch_apps_custom_command = "HOME/.local/bin/porphyx-gpu-launch $CMD"
 
 # Greeter: fondo y paleta siguen al shell, sin prompt (regla polkit en greeter-setup).
 [shell.greeter_sync]

@@ -11,7 +11,6 @@ binds {
     // ─── Applications ───
     Mod+Return                          hotkey-overlay-title="Open Terminal: Foot" { spawn "foot"; }
     Mod+B                               hotkey-overlay-title="Open Browser: zen" { spawn "env" "__EGL_VENDOR_LIBRARY_FILENAMES=/usr/share/glvnd/egl_vendor.d/50_mesa.json" "zen-browser"; }
-    Mod+Alt+G hotkey-overlay-title="dGPU + gamer mode" { spawn-sh "~/.local/bin/porphyx-gpu-prime toggle"; }
 
     // --- Noctalia ---
     Mod+Shift+Return                    hotkey-overlay-title="Open Wallpaper Selector: noctalia wallpaper toggle" { spawn-sh "noctalia msg panel-toggle wallpaper"; }

@@ -23,8 +23,7 @@ Arch Linux ligero con el entorno de Noctalia: compositor Wayland Umbriel, shell 
 greetd y las apps básicas ya integradas. Se instala desde una ISO propia, en dos pasos: la base de Arch
 y `porphyx setup`.
 
-Estado: en desarrollo. El flujo completo se está validando en máquina virtual. La parte de GPU híbrida
-es opcional y solo existe para ASUS TUF.
+Estado: en desarrollo. El flujo completo se está validando en máquina virtual.
 
 ## Qué incluye
 
@@ -59,8 +58,7 @@ Pide sudo una vez. Si el repo precompilado no está disponible, cae al AUR y mue
 Al terminar, reinicia: entras por el greeter de Noctalia a una sesión Umbriel.
 
 Variables opcionales: `PORPHYX_REPO` (dónde clonar; por defecto `~/porphyx`), `PORPHYX_AUR_CACHE`,
-`PORPHYX_ASSUME_YES=1` (compila sin mostrar los PKGBUILD) y `PORPHYX_GPU=s` o `n` (responde de antemano
-la pregunta de GPU híbrida).
+`PORPHYX_ASSUME_YES=1` (compila sin mostrar los PKGBUILD).
 
 ### Sobre un Arch ya instalado
 
@@ -106,28 +104,6 @@ Todo debe estar commiteado: `porphyx/porphyx` se toma de HEAD.
 
 Volumen, brillo y multimedia pasan por Noctalia, con OSD.
 
-## GPU híbrida y energía (opcional, solo ASUS TUF)
-
-`install.sh` pregunta si instalar esta parte y solo la ofrece en una ASUS TUF. Usa sysfs, udev, polkit y
-systemd, sin asusctl ni supergfxctl. Los perfiles de CPU los lleva power-profiles-daemon.
-
-| Modo | dGPU | Consumo en reposo* |
-|---|---|---|
-| Ahorro | Apagada por firmware | unos 9 W |
-| Híbrido | Encendida | unos 23 W |
-| Modo juego | Encendida, con PRIME offload en apps nativas y flatpaks | n/d |
-
-\* Medido el 6 de noviembre de 2026 con perfil `power-saver`, en batería. Detalle en
-[docs/notas-odyssey.md](docs/notas-odyssey.md).
-
-```bash
-sudo porphyx-dgpu off    # ahorro
-sudo porphyx-dgpu on     # híbrido
-porphyx-dgpu status
-```
-
-Más detalle en [`gpu-setup/`](gpu-setup/README.md).
-
 ## Mapa del repo
 
 | Ruta | Qué es |
@@ -138,7 +114,6 @@ Más detalle en [`gpu-setup/`](gpu-setup/README.md).
 | [`config/`](config/README.md) | Dotfiles: Noctalia, Umbriel, foot, zsh, MangoHud, launcher (`config/niri` es legado) |
 | [`bin/`](bin/README.md) | Scripts que van a `~/.local/bin` |
 | [`greeter-setup/`](greeter-setup/README.md) | greetd + noctalia-greeter |
-| [`gpu-setup/`](gpu-setup/README.md) | GPU híbrida (opcional) |
 | `logind/` | Botón de apagado: pulsación corta bloquea y suspende, larga apaga |
 | [`docs/`](docs/) | [Instalación en detalle](docs/instalacion-detalle.md) y [notas de port a Odyssey](docs/notas-odyssey.md) |
 | [`alienware-setup/`](alienware-setup/README.md) | RGB para un Alienware, sin soporte |
