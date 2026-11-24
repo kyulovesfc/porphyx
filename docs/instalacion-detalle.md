@@ -85,3 +85,10 @@ tocar el display manager del sistema, o dependen de contexto que varía por máq
 - `greeter-setup/`: greetd + noctalia-greeter
 - Imagenes: `config/wallpapers/` las trae; `install.sh` las copia a `~/Pictures/Wallpapers/` (sin pisar las
   existentes) y `noctalia-full-config.toml` apunta ahi, avatar incluido.
+
+## Descargar la ISO desde cualquier equipo
+
+    curl -fsSL https://raw.githubusercontent.com/kyulovesfc/porphyx/main/get-iso.sh | bash
+
+Descarga `porphyx-latest-x86_64.iso` desde el release `iso`, verifica el sha256 y la deja en ~/Downloads.
+Para grabarla directo a un USB: `USB=/dev/sdX` antes del `bash` (pide confirmación). Publicar una ISO nueva: `iso/publish-iso.sh`.
