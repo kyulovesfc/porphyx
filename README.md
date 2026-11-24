@@ -126,7 +126,7 @@ sudo porphyx-dgpu on     # híbrido
 porphyx-dgpu status
 ```
 
-Más detalle en [`gpu-setup/`](gpu-setup/README.md) y [`gaming-mode/`](gaming-mode/README.md).
+Más detalle en [`gpu-setup/`](gpu-setup/README.md).
 
 ## Mapa del repo
 
@@ -138,7 +138,7 @@ Más detalle en [`gpu-setup/`](gpu-setup/README.md) y [`gaming-mode/`](gaming-mo
 | [`config/`](config/README.md) | Dotfiles: Noctalia, Umbriel, foot, zsh, MangoHud, launcher (`config/niri` es legado) |
 | [`bin/`](bin/README.md) | Scripts que van a `~/.local/bin` |
 | [`greeter-setup/`](greeter-setup/README.md) | greetd + noctalia-greeter |
-| [`gpu-setup/`](gpu-setup/README.md), [`gaming-mode/`](gaming-mode/README.md) | GPU híbrida y modo juego (opcional) |
+| [`gpu-setup/`](gpu-setup/README.md) | GPU híbrida (opcional) |
 | `logind/` | Botón de apagado: pulsación corta bloquea y suspende, larga apaga |
 | [`docs/`](docs/) | [Instalación en detalle](docs/instalacion-detalle.md) y [notas de port a Odyssey](docs/notas-odyssey.md) |
 | [`alienware-setup/`](alienware-setup/README.md) | RGB para un Alienware, sin soporte |

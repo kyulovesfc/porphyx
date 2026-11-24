@@ -267,7 +267,7 @@ if [ -n "${PORPHYX:-}" ]; then
   _pn=$(cat /sys/class/dmi/id/product_name 2>/dev/null || true)
   if [[ "$_pn" == *TUF* ]] && [ -d /sys/devices/platform/asus-nb-wmi ]; then
     echo "== GPU hibrida (ASUS TUF, WIP) =="
-    echo "Ahorro de la dGPU, PRIME offload, gaming-mode y curvas de ventilador."
+    echo "Ahorro de la dGPU y PRIME offload."
     if [ -n "${PORPHYX_GPU:-}" ]; then _r="$PORPHYX_GPU"
     elif [ -r /dev/tty ]; then read -r -p "Instalar la parte de GPU hibrida ahora? [s/N] " _r </dev/tty
     else _r=n; fi
@@ -291,8 +291,10 @@ update-desktop-database "$HOME/.local/share/applications" 2>/dev/null || true
 if [ "$GPU_SETUP" = si ] && [[ -e /sys/devices/platform/asus-nb-wmi/dgpu_disable ]]; then
     sudo "$REPO_DIR/gpu-setup/deploy-dgpu.sh" || echo "AVISO: deploy-dgpu.sh fallo"
 fi
-if [ -n "${PORPHYX:-}" ] && [ "$GPU_SETUP" = si ]; then
-    bash "$REPO_DIR/gaming-mode/install-gaming-mode.sh" || echo "AVISO: install-gaming-mode.sh fallo"
+# ASUS: perfiles, ventiladores y firmware con asusctl + rog-control-center
+# (asusd es static: lo activa una regla udev, no hay que habilitarlo)
+if [ -d /sys/devices/platform/asus-nb-wmi ]; then
+    sudo pacman -S --needed --noconfirm asusctl rog-control-center || echo "AVISO: no pude instalar asusctl / rog-control-center"
 fi
 
 
