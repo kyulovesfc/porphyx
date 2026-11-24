@@ -34,9 +34,7 @@ order = [ "default", "Utilities" ]
         "spacer_3",
         "notifications",
         "spacer_3",
-        "bar_2",
         "spacer_3",
-        "monitor",
         "spacer_3",
         "clipboard",
         "spacer_3"
