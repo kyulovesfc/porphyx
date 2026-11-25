@@ -13,7 +13,9 @@ command -v sudo >/dev/null 2>&1 || die "falta sudo"
 export PORPHYX_ASSUME_YES="${PORPHYX_ASSUME_YES:-1}"
 export MAKEFLAGS="${MAKEFLAGS:--j$(nproc)}"
 sudo -v
-( while kill -0 "$$" 2>/dev/null; do sudo -n true; sleep 50; done ) &
+( while kill -0 "$$" 2>/dev/null; do sudo -n -v 2>/dev/null; sleep 50; done ) &
+SUDO_KEEP=$!
+trap 'kill "$SUDO_KEEP" 2>/dev/null || true' EXIT
 
 echo "== Red =="
 # KYU-NET-CHECK: si no hay red, abre nmtui para conectar y vuelve a probar
