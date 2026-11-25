@@ -8,7 +8,6 @@ Dotfiles que `install.sh` despliega. Cada carpeta es un módulo independiente.
 | `umbriel/` | `config.toml` de Umbriel (va a `~/.config/umbriel/`) y `effects/` (presets de animacion propios, como `workspace_wipe_rev`; van a `~/.config/umbriel/effects/`) | Vigente |
 | `foot/` | `foot.ini` | Vigente |
 | `zsh/` | `zshrc` y `p10k.zsh` | Vigente |
-| `MangoHud/` | `MangoHud.conf` | Vigente |
 | `applications/` | Entradas de launcher: cava, cmatrix y lavat. Van a `~/.local/share/applications` | Vigente |
 | `environment.d/` | `10-path.conf` | Vigente |
 | `niri/` | `config.kdl` y `cfg/` | Legado: niri solo es la base de CachyOS |

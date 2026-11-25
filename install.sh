@@ -106,38 +106,6 @@ os.makedirs(os.path.dirname(sys.argv[2]), exist_ok=True)
 open(sys.argv[2], 'w').write(out)
 GENEOF
 
-echo "== MangoHud (paquete + config) =="
-if ! pacman -Qi mangohud &>/dev/null; then
-  sudo pacman -S --needed --noconfirm mangohud
-else
-  echo "mangohud ya instalado, se omite pacman."
-fi
-backup_and_copy "$REPO_DIR/config/MangoHud/MangoHud.conf" "$HOME/.config/MangoHud/MangoHud.conf"
-sed -i "s|=HOME/|=$HOME/|g" "$HOME/.config/MangoHud/MangoHud.conf"
-grep -q '=HOME/' "$HOME/.config/MangoHud/MangoHud.conf" && { echo "ERROR: placeholder sin sustituir en MangoHud.conf" >&2; exit 1; }
-
-echo "== MangoHud en flatpaks (Sober / mcpelauncher) =="
-if flatpak info org.vinegarhq.Sober &>/dev/null || flatpak info io.mrarm.mcpelauncher &>/dev/null; then
-  flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-  flatpak install --user -y flathub org.freedesktop.Platform.VulkanLayer.MangoHud//25.08 || true
-  flatpak override --user --filesystem=xdg-config/MangoHud:ro
-  if flatpak info org.vinegarhq.Sober &>/dev/null; then
-    # Sober renderiza por Vulkan: no necesita LD_PRELOAD/MANGOHUD_DLSYM, el layer implícito ya lo cubre.
-    # device=input y el filesystem de Discord IPC sí son necesarios (los pide el propio Sober al abrir).
-    flatpak override --user --device=input org.vinegarhq.Sober
-    flatpak override --user --filesystem=xdg-run/app/com.discordapp.Discord:create org.vinegarhq.Sober
-    flatpak override --user --filesystem=xdg-run/discord-ipc-0 org.vinegarhq.Sober
-    flatpak override --user --env=MANGOHUD=1 org.vinegarhq.Sober
-  fi
-  if flatpak info io.mrarm.mcpelauncher &>/dev/null; then
-    flatpak override --user --env=MANGOHUD=1 io.mrarm.mcpelauncher
-    flatpak override --user --env=MANGOHUD_DLSYM=1 io.mrarm.mcpelauncher
-    flatpak override --user --env=LD_PRELOAD=/usr/lib/extensions/vulkan/MangoHud/lib/x86_64-linux-gnu/libMangoHud_opengl.so io.mrarm.mcpelauncher
-  fi
-else
-  echo "Ni Sober ni mcpelauncher están instalados, se omite."
-fi
-
 echo "== Gestor de archivos (Luciole) + iconos Papirus =="
 LUC=dev.noctalia.luciole.desktop
 if [ -f "/usr/share/applications/$LUC" ]; then

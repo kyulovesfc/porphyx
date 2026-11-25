@@ -63,7 +63,7 @@ bash ~/porphyx/porphyx/porphyx-setup.sh
 | Terminal | foot, zsh with oh-my-zsh, powerlevel10k, zoxide, eza and fzf |
 | Browser | Zen Browser |
 | Packages | Shelly: pacman, AUR and Flatpak manager |
-| Extras | MangoHud, flatpak, cava, cmatrix, lavat, playerctl |
+| Extras | flatpak, cava, cmatrix, lavat, playerctl |
 
 Umbriel, Luciole, lavat, oh-my-zsh and powerlevel10k come precompiled from the `[porphyx]` pacman repo (unsigned, GitHub release `repo`), so `porphyx setup` compiles nothing. Only Zen Browser and Shelly come from the AUR (prebuilt binaries), and the AUR is also the fallback if the repo is unreachable.
 
@@ -105,7 +105,7 @@ Everything must be committed: `porphyx/porphyx` is taken from `HEAD`.
 | [`install.sh`](install.sh) | Deploys dotfiles and configures Umbriel, Noctalia and the apps; called by `porphyx setup` |
 | `porphyx/` | The `porphyx` command, `porphyx-setup.sh`, the AUR fallback installer and package lists |
 | `iso/` | ISO build: archiso profile, `porphyx-install`, branding |
-| [`config/`](config/README.md) | Dotfiles: Noctalia, Umbriel, foot, zsh, MangoHud (`config/niri` is legacy) |
+| [`config/`](config/README.md) | Dotfiles: Noctalia, Umbriel, foot, zsh (`config/niri` is legacy) |
 | [`bin/`](bin/README.md) | Scripts installed to `~/.local/bin` |
 | [`greeter-setup/`](greeter-setup/README.md) | greetd + noctalia-greeter |
 | `logind/` | Power button: short press locks and suspends, long press powers off |
