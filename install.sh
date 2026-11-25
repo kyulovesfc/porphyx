@@ -237,12 +237,6 @@ fi
 
 systemctl --user daemon-reload
 
-# ASUS: perfiles, ventiladores y firmware con asusctl + rog-control-center
-# (asusd es static: lo activa una regla udev, no hay que habilitarlo)
-if [ -d /sys/devices/platform/asus-nb-wmi ]; then
-    sudo pacman -S --needed --noconfirm asusctl rog-control-center || echo "AVISO: no pude instalar asusctl / rog-control-center"
-fi
-
 echo "== Umbriel (compositor principal) =="
 need_paru() { command -v paru >/dev/null 2>&1 || sudo pacman -S --needed --noconfirm paru; }
 for pkg in umbriel-git xdg-desktop-portal-umbriel-git; do
