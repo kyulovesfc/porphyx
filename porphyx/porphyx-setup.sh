@@ -16,12 +16,13 @@ sudo -v
 ( while kill -0 "$$" 2>/dev/null; do sudo -n true; sleep 50; done ) &
 
 echo "== Red =="
-if ping -c1 -W5 archlinux.org >/dev/null 2>&1; then
-  echo "ok"
-else
-  echo "Sin conexion. Conectate (nmtui) y vuelve a correr: porphyx setup" >&2
-  exit 1
+# KYU-NET-CHECK: si no hay red, abre nmtui para conectar y vuelve a probar
+if ! ping -c1 -W5 archlinux.org >/dev/null 2>&1; then
+  echo "Sin conexion. Conectate para continuar."
+  command -v nmtui >/dev/null 2>&1 && nmtui
+  ping -c1 -W5 archlinux.org >/dev/null 2>&1 || die "sin internet; conectate (nmtui) y vuelve a correr: porphyx setup"
 fi
+echo "ok"
 
 echo "== Paquetes oficiales =="
 mapfile -t PKGS < <(sed "s/#.*//" "$HERE/official-packages.txt" | tr -s " \t" "\n" | grep -v "^$")

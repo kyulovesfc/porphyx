@@ -9,6 +9,12 @@ case "${1:-help}" in
     if [ -f "$REPO_DIR/install.sh" ]; then
       echo "Usando el repo existente: $REPO_DIR"
     else
+      # KYU-NET-CHECK: hace falta red para clonar; si no hay, abre nmtui
+      if ! ping -c1 -W5 archlinux.org >/dev/null 2>&1; then
+        echo "Sin conexion. Conectate para continuar."
+        command -v nmtui >/dev/null 2>&1 && nmtui
+        ping -c1 -W5 archlinux.org >/dev/null 2>&1 || { echo "ERROR: sin internet; conectate (nmtui) y vuelve a correr: porphyx setup" >&2; exit 1; }
+      fi
       command -v git >/dev/null 2>&1 || sudo pacman -S --needed --noconfirm git
       git clone --depth 1 "$REPO_URL" "$REPO_DIR"
     fi
