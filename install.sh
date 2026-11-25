@@ -30,7 +30,7 @@ backup_and_copy "$REPO_DIR/config/noctalia/scripts/rgb-sync-hook.sh" "$HOME/.con
 chmod +x "$HOME/.config/noctalia/scripts/rgb-sync-hook.sh"
 
 echo "== Tema de cursor =="
-# El tema y el tamaño los gobierna config/niri/cfg/cursor.kdl, fuente única.
+# El tema y el tamaño los define config/umbriel/config.toml ([input.cursor]).
 # Acá solo se garantiza que el paquete esté instalado.
 pacman -Qi capitaine-cursors >/dev/null 2>&1 || sudo pacman -S --needed capitaine-cursors
 
@@ -158,13 +158,6 @@ for pkg in papirus-icon-theme; do
   fi
 done
 
-# KYU-NIRI-OPCIONAL
-if command -v niri >/dev/null 2>&1; then
-echo "== niri cfg =="
-for f in "$REPO_DIR"/config/niri/cfg/*.kdl; do
-  backup_and_copy "$f" "$HOME/.config/niri/cfg/$(basename "$f")"
-done
-fi
 
 echo "== Zsh (paquetes + config + p10k) =="
 if ! pacman -Qi zsh &>/dev/null; then
@@ -222,11 +215,6 @@ backup_and_copy "$REPO_DIR/config/foot" "$HOME/.config/foot"
 mkdir -p "$HOME/.config/foot/themes"
 [ -f "$HOME/.config/foot/themes/noctalia" ] || cp "$REPO_DIR/assets/foot-theme-noctalia.seed" "$HOME/.config/foot/themes/noctalia"
 
-# KYU-NIRI-OPCIONAL-2
-if command -v niri >/dev/null 2>&1; then
-echo "== niri config.kdl (window-rules, blur) =="
-backup_and_copy "$REPO_DIR/config/niri/config.kdl" "$HOME/.config/niri/config.kdl"
-fi
 
 echo "== Zen Browser =="
 if ! pacman -Qi zen-browser-bin &>/dev/null; then

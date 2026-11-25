@@ -1,4 +1,4 @@
-# Configuración de Umbriel para porphyx (portada de config/niri/cfg/*.kdl).
+# Configuración de Umbriel para porphyx (portada de la config de Niri, ya retirada).
 # Validar con: umbriel config validate
 
 [include.optional]

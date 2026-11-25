@@ -14,7 +14,7 @@ REPO_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 
 # desplegados + repo. config/niri/cfg del repo se omite: es el destino del symlink
 # ~/.config/niri/cfg, ya cubierto arriba.
-DIRS=("$HOME/.config/noctalia" "$HOME/.config/foot" "$HOME/.config/systemd/user" "$HOME/.local/state/noctalia" "$HOME/.config/niri/cfg" \
+DIRS=("$HOME/.config/noctalia" "$HOME/.config/foot" "$HOME/.config/systemd/user" "$HOME/.local/state/noctalia" \
       "$REPO_DIR" "$REPO_DIR/bin" "$REPO_DIR/config/noctalia" "$REPO_DIR/config/systemd-user")
 
 for dir in "${DIRS[@]}"; do
