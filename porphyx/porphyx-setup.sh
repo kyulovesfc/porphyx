@@ -39,7 +39,7 @@ if ! sudo pacman -Sy --needed --noconfirm umbriel-git xdg-desktop-portal-umbriel
 fi
 sudo pacman -S --needed --noconfirm luciole-git lavat oh-my-zsh-git zsh-theme-powerlevel10k-git || echo "AVISO: luciole-git/lavat no estan en el repo precompilado, se intentan del AUR" >&2
 echo "== AUR: resto =="
-for p in oh-my-zsh-git zsh-theme-powerlevel10k-git lavat zen-browser-bin luciole-git; do
+for p in oh-my-zsh-git zsh-theme-powerlevel10k-git lavat zen-browser-bin luciole-git shelly-bin shelly-flatpak-backend-bin; do
   bash "$HERE/aur-install.sh" "$p" || echo "AVISO: $p no se instalo" >&2
 done
 

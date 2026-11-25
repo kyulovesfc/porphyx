@@ -62,9 +62,10 @@ bash ~/porphyx/porphyx/porphyx-setup.sh
 | Files | Luciole, Papirus icons |
 | Terminal | foot, zsh with oh-my-zsh, powerlevel10k, zoxide, eza and fzf |
 | Browser | Zen Browser |
+| Packages | Shelly: pacman, AUR and Flatpak manager |
 | Extras | MangoHud, flatpak, cava, cmatrix, lavat, playerctl |
 
-Umbriel, Luciole, lavat, oh-my-zsh and powerlevel10k come precompiled from the `[porphyx]` pacman repo (unsigned, GitHub release `repo`), so `porphyx setup` compiles nothing. Only Zen Browser comes from the AUR (binary), and the AUR is also the fallback if the repo is unreachable.
+Umbriel, Luciole, lavat, oh-my-zsh and powerlevel10k come precompiled from the `[porphyx]` pacman repo (unsigned, GitHub release `repo`), so `porphyx setup` compiles nothing. Only Zen Browser and Shelly come from the AUR (prebuilt binaries), and the AUR is also the fallback if the repo is unreachable.
 
 ## Keybindings
 
