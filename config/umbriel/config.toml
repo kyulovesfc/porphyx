@@ -62,7 +62,7 @@ action = "overview-open"
 
 [keybinds]
 "Mod+Return" = { action = "spawn foot", repeat = false }
-"Mod+B" = { action = "spawn env __EGL_VENDOR_LIBRARY_FILENAMES=/usr/share/glvnd/egl_vendor.d/50_mesa.json zen-browser", repeat = false }
+"Mod+B" = { action = "spawn zen-browser", repeat = false }
 "Mod+E" = { action = "spawn luciole", repeat = false }
 "Mod+S" = "spawn noctalia msg panel-toggle control-center"
 "Mod+Space" = "spawn noctalia msg panel-toggle launcher"
