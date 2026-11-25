@@ -10,3 +10,4 @@ config/noctalia/settings.toml
 iso/work/
 iso/out/
 
+__pycache__/
