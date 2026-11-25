@@ -22,6 +22,19 @@ python3 "$HERE/gen-config.py" "$HERE" "$A/archinstall.json"
 cp -a "$HERE/overlay/." "$W/profile/"
 sed -i 's|^  \["/usr/local/bin/choose-mirror"\]="0:0:755"|&\n  ["/usr/local/bin/porphyx-install"]="0:0:755"|' "$W/profile/profiledef.sh"
 
+# KYU-ISO-NM: NetworkManager + nmtui en el live (en vez de iwd/networkd)
+P="$W/profile"
+grep -qx networkmanager "$P/packages.x86_64" || echo networkmanager >> "$P/packages.x86_64"
+S="$P/airootfs/etc/systemd/system"
+rm -f "$S/multi-user.target.wants/iwd.service" \
+      "$S/multi-user.target.wants/systemd-networkd.service" \
+      "$S/network-online.target.wants/systemd-networkd-wait-online.service" \
+      "$S"/sockets.target.wants/systemd-networkd*.socket
+ln -sf /usr/lib/systemd/system/NetworkManager.service "$S/multi-user.target.wants/NetworkManager.service"
+ln -sf /usr/lib/systemd/system/NetworkManager-dispatcher.service "$S/dbus-org.freedesktop.nm-dispatcher.service"
+mkdir -p "$S/network-online.target.wants"
+ln -sf /usr/lib/systemd/system/NetworkManager-wait-online.service "$S/network-online.target.wants/NetworkManager-wait-online.service"
+
 # KYU-ISO-BRAND
 bash "$HERE/brand.sh" "$W/profile" "$REPO_DIR"
 sudo mkarchiso -v -w "$W/work" -o "$OUT" "$W/profile"

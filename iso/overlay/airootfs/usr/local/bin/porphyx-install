@@ -3,6 +3,7 @@
 set -Eeuo pipefail
 [[ $EUID -eq 0 ]] || exec sudo "$0" "$@"
 setvtrgb /etc/porphyx-vtrgb 2>/dev/null || true
+command -v nm-online >/dev/null 2>&1 && nm-online -q -t 15 || true
 # KYU-NET-CHECK: el instalador es online; si no hay red, ayuda a conectar antes de abrir archinstall
 if ! ping -c1 -W3 archlinux.org >/dev/null 2>&1; then
   echo "Sin internet. Conectate para continuar."
