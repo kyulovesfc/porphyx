@@ -26,7 +26,9 @@ for p in "$@"; do
   # dependencias que solo existen en el AUR: se instalan primero (cada una muestra su PKGBUILD)
   if [ -f "$d/.SRCINFO" ] && [ "${PORPHYX_AUR_DEPTH:-0}" -lt 4 ]; then
     deps="$(sed -n -E 's/^[[:space:]]*(depends|makedepends|checkdepends)(_[a-z0-9_]+)? = ([^<>=[:space:]]+).*/\3/p' "$d/.SRCINFO" | sort -u)"
+    own="$(sed -n -E 's/^[[:space:]]*(pkgbase|pkgname) = (.+)$/\2/p' "$d/.SRCINFO")"  # KYU-SPLIT: paquetes del mismo PKGBUILD no son dependencias externas
     for dep in $deps; do
+      printf '%s\n' "$own" | grep -qxF "$dep" && continue
       pacman -T "$dep" >/dev/null 2>&1 && continue
       pacman -Sp "$dep" >/dev/null 2>&1 && continue
       echo "$p necesita $dep (solo AUR)"

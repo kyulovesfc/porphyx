@@ -5,3 +5,4 @@ greetd noctalia-greeter noctalia polkit xwayland-satellite xdg-desktop-portal xd
 foot papirus-icon-theme capitaine-cursors cava cmatrix playerctl mangohud flatpak
 # Zsh
 zsh zoxide eza fzf zsh-autosuggestions zsh-syntax-highlighting zsh-completions zsh-history-substring-search pkgfile powerline-fonts vim
+gpu-screen-recorder   # plugin de Noctalia (grabacion de pantalla)
