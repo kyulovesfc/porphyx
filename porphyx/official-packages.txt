@@ -2,10 +2,12 @@
 # Sesion, portales y fuentes
 greetd noctalia-greeter noctalia polkit xwayland-satellite xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-gnome gnome-keyring wl-clipboard adw-gtk-theme noto-fonts noto-fonts-emoji grim slurp
 # Apps y temas del repo
-foot papirus-icon-theme capitaine-cursors cava cmatrix playerctl mangohud flatpak
+foot papirus-icon-theme capitaine-cursors cava cmatrix playerctl flatpak
 # Zsh
 zsh zoxide eza fzf zsh-autosuggestions zsh-syntax-highlighting zsh-completions zsh-history-substring-search pkgfile powerline-fonts vim
 gpu-screen-recorder   # plugin de Noctalia (grabacion de pantalla)
 # Sistema y apps (sync con instalacion real)
 networkmanager bluez bluez-utils pipewire pipewire-pulse wireplumber power-profiles-daemon upower switcheroo-control fwupd keyd evtest cronie zram-generator timeshift fuse2 mesa-utils
 btop nvtop fastfetch code kate vlc discord steam wine supertuxkart
+# Audio, imagenes y dibujo
+strawberry loupe kolourpaint

@@ -49,7 +49,7 @@ for a in io.mrarm.mcpelauncher org.vinegarhq.Sober org.vinegarhq.Vinegar; do
   flatpak install --user -y --noninteractive flathub "$a" || echo "AVISO: $a no se instalo" >&2
 done
 echo "== AUR: resto =="
-for p in oh-my-zsh-git zsh-theme-powerlevel10k-git lavat zen-browser-bin luciole-git shelly-bin shelly-flatpak-backend-bin heroic-games-launcher-bin artcraft-launcher; do
+for p in oh-my-zsh-git zsh-theme-powerlevel10k-git lavat zen-browser-bin luciole-git shelly-bin shelly-flatpak-backend-bin heroic-games-launcher-bin artcraft-launcher pear-desktop-bin; do
   bash "$HERE/aur-install.sh" "$p" || echo "AVISO: $p no se instalo" >&2
 done
 
