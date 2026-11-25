@@ -9,5 +9,5 @@ gpu-screen-recorder   # plugin de Noctalia (grabacion de pantalla)
 # Sistema y apps (sync con instalacion real)
 networkmanager bluez bluez-utils pipewire pipewire-pulse wireplumber power-profiles-daemon upower switcheroo-control fwupd keyd evtest cronie zram-generator timeshift fuse2 mesa-utils
 btop nvtop fastfetch code kate vlc discord steam wine supertuxkart
-# Audio, imagenes y dibujo
-strawberry loupe kolourpaint
+# Imagenes
+loupe
