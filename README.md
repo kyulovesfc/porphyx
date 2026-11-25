@@ -1,127 +1,119 @@
 # Porphyx Linux
 
-## Get the ISO
+A lightweight Arch Linux with a Noctalia desktop: the Umbriel Wayland compositor, the Noctalia v5 shell and a greetd login, installed from its own ISO in two phases.
 
-Copy and paste this in any Linux terminal:
+> **Status:** in development. The full flow is validated in a virtual machine; testing on real hardware is ongoing.
+
+## Download
+
+**[porphyx-latest-x86_64.iso](https://github.com/kyulovesfc/porphyx/releases/download/iso/porphyx-latest-x86_64.iso)** (UEFI only)
+
+Or from any Linux terminal, which also verifies the sha256:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/kyulovesfc/porphyx/main/get-iso.sh | bash
 ```
 
-It downloads `porphyx-latest-x86_64.iso` to `~/Downloads` and verifies its sha256.
-
-To write it straight to a USB stick (asks you to type BORRAR before erasing anything):
+To write it straight to a USB stick (it asks you to type `BORRAR` before erasing anything):
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/kyulovesfc/porphyx/main/get-iso.sh | USB=/dev/sdX bash
 ```
 
-Boot the stick and run `porphyx-install`.
+## Installation
 
+Porphyx installs in two phases. Both need an internet connection and offer a text UI to connect if there is none.
 
-Arch Linux ligero con el entorno de Noctalia: compositor Wayland Umbriel, shell Noctalia v5, login con
-greetd y las apps básicas ya integradas. Se instala desde una ISO propia, en dos pasos: la base de Arch
-y `porphyx setup`.
+**Phase 1: base system.** Boot the ISO and run:
 
-Estado: en desarrollo. El flujo completo se está validando en máquina virtual.
+```bash
+porphyx-install
+```
 
-## Qué incluye
+It is a basic `archinstall` with the project defaults already set: Latin American keyboard, `es_MX` locale, `America/Mexico_City` timezone, hostname `porphyx` and systemd-boot. You only pick the disk and your user. Reboot when it finishes.
 
-| Capa | Componente |
-|---|---|
-| Base | Arch Linux, kernel `linux`, systemd-boot, NetworkManager, swap en zram (zstd), PipeWire, Bluetooth, keyd |
-| Compositor | Umbriel (Wayland, basado en wlroots) con `xdg-desktop-portal-umbriel` y efectos propios en `config/umbriel/effects/` |
-| Shell | Noctalia v5: barra, launcher, centro de control, OSD, bloqueo de sesión y 13 plugins que se habilitan en el primer arranque |
-| Login | greetd + noctalia-greeter |
-| Archivos | Luciole, con iconos Papirus |
-| Terminal | foot y zsh con oh-my-zsh, powerlevel10k, zoxide, eza y fzf |
-| Navegador | Zen Browser |
-| Extras | MangoHud, flatpak, cava, cmatrix, lavat, playerctl y el cursor capitaine |
-
-Umbriel, Luciole, lavat, oh-my-zsh y powerlevel10k se instalan precompilados desde el repo pacman `[porphyx]`
-(release `repo` de GitHub, sin firmar): `porphyx setup` no compila nada. Solo Zen Browser viene del AUR (binario).
-
-## Instalación
-
-1. Arranca la ISO (UEFI) con internet disponible y ejecuta `porphyx-install`. Es archinstall con la
-   configuración del proyecto: teclado latam, `es_MX`, zona `America/Mexico_City`, hostname `porphyx` y
-   systemd-boot ya definidos. Disco y usuario se eligen en el menú.
-2. Reinicia e inicia sesión en la TTY con tu usuario.
-3. Con internet (`nmtui` si hace falta) ejecuta:
+**Phase 2: desktop.** Log in on the TTY with your user and run:
 
 ```bash
 porphyx setup
 ```
 
-Instala los paquetes oficiales y los del repo `[porphyx]`, despliega los dotfiles (`install.sh`) y configura greetd.
-Pide sudo una vez. Si el repo precompilado no está disponible, cae al AUR y muestra cada PKGBUILD (sal del visor con `q`).
-Al terminar, reinicia: entras por el greeter de Noctalia a una sesión Umbriel.
+It installs the desktop packages, deploys the dotfiles and sets up greetd. It asks for sudo once. Reboot, and you land in the Noctalia greeter and an Umbriel session.
 
-Variables opcionales: `PORPHYX_REPO` (dónde clonar; por defecto `~/porphyx`), `PORPHYX_AUR_CACHE`,
-`PORPHYX_ASSUME_YES=1` (compila sin mostrar los PKGBUILD).
+Optional variables: `PORPHYX_REPO` (clone location, default `~/porphyx`), `PORPHYX_AUR_CACHE` and `PORPHYX_ASSUME_YES=1` (build AUR packages without showing the PKGBUILDs).
 
-### Sobre un Arch ya instalado
+### On an existing Arch install
 
-Sin probar fuera de la ISO:
+Not tested outside the ISO:
 
 ```bash
 git clone https://github.com/kyulovesfc/porphyx.git ~/porphyx
 bash ~/porphyx/porphyx/porphyx-setup.sh
 ```
 
-## Construir la ISO
+## What is included
 
-Desde un Arch con `archiso`, `git`, `python` y `sudo` (`imagemagick` es opcional, para el splash):
+| Layer | Component |
+|---|---|
+| Base | Arch Linux, `linux` kernel, systemd-boot, NetworkManager, zram swap, PipeWire, Bluetooth, keyd |
+| Compositor | Umbriel with `xdg-desktop-portal-umbriel` and custom effects |
+| Shell | Noctalia v5: bar, launcher, control center, OSD, lock screen and plugins |
+| Login | greetd + noctalia-greeter |
+| Files | Luciole, Papirus icons |
+| Terminal | foot, zsh with oh-my-zsh, powerlevel10k, zoxide, eza and fzf |
+| Browser | Zen Browser |
+| Extras | MangoHud, flatpak, cava, cmatrix, lavat, playerctl |
+
+Umbriel, Luciole, lavat, oh-my-zsh and powerlevel10k come precompiled from the `[porphyx]` pacman repo (unsigned, GitHub release `repo`), so `porphyx setup` compiles nothing. Only Zen Browser comes from the AUR (binary), and the AUR is also the fallback if the repo is unreachable.
+
+## Keybindings
+
+`Mod` is the Super key. The full list is in `config/umbriel/config.toml` and can be edited with `umbriel-keybinds`. `Mod+Shift+Escape` opens the cheatsheet.
+
+| Shortcut | Action |
+|---|---|
+| `Mod+Return` | Terminal (foot) |
+| `Mod+Space` / `Mod+S` | Launcher / Noctalia control center |
+| `Mod+B` / `Mod+E` | Zen Browser / Luciole |
+| `Mod+Alt+L` | Lock session |
+| `Mod+Q` | Close window |
+| `Mod+Z` | Terminal scratchpad |
+| `Mod+T` / `Mod+F` | Toggle floating / maximize column |
+| `Mod+O` | Overview |
+| `Mod+1`..`9` | Go to workspace |
+| `Print` | Region screenshot |
+
+Volume, brightness and media keys go through Noctalia, with an OSD.
+
+## Building the ISO
+
+From an Arch system with `archiso`, `git`, `python` and `sudo`:
 
 ```bash
 cd ~/porphyx
-iso/check-packages.sh   # verifica que target-packages.txt resuelva en Arch puro
-iso/build-iso.sh        # deja la ISO en iso/out/
+iso/check-packages.sh   # check that target-packages.txt resolves on plain Arch
+iso/build-iso.sh        # writes the ISO to iso/out/
 ```
 
-Todo debe estar commiteado: `porphyx/porphyx` se toma de HEAD.
+Everything must be committed: `porphyx/porphyx` is taken from `HEAD`.
 
-## Atajos de Umbriel
+## Repository layout
 
-`Mod` es la tecla Super. La lista completa está en `config/umbriel/config.toml` y se edita con
-`umbriel-keybinds`. `Mod+Shift+Escape` abre el cheatsheet.
-
-| Atajo | Acción |
+| Path | Description |
 |---|---|
-| `Mod+Return` | Terminal (foot) |
-| `Mod+Space` / `Mod+S` | Launcher / centro de control de Noctalia |
-| `Mod+B` / `Mod+E` | Zen Browser / Luciole |
-| `Mod+Alt+L` | Bloquear sesión |
-| `Mod+Q` | Cerrar ventana |
-| `Mod+Z` | Scratchpad de terminal |
-| `Mod+T` / `Mod+F` | Flotar o tilear / maximizar la columna |
-| `Mod+M` | Cambiar de layout (dwindle, scrolling, master) |
-| `Mod+O` | Overview |
-| `Mod+1`..`9` | Ir a un workspace |
-| `Mod+Tab` | Volver al workspace anterior |
-| `Print` | Captura de región |
-| `Mod+Escape` | Inhibir los atajos (útil en máquinas virtuales) |
-
-Volumen, brillo y multimedia pasan por Noctalia, con OSD.
-
-## Mapa del repo
-
-| Ruta | Qué es |
-|---|---|
-| [`install.sh`](install.sh) | Despliega los dotfiles y configura Umbriel, Noctalia y las apps. Lo llama `porphyx setup` |
-| `porphyx/` | Comando `porphyx`, `porphyx-setup.sh`, instalador de respaldo del AUR y listas de paquetes |
-| `iso/` | Construcción de la ISO: perfil archiso, `porphyx-install`, branding |
-| [`config/`](config/README.md) | Dotfiles: Noctalia, Umbriel, foot, zsh, MangoHud, launcher (`config/niri` es legado) |
-| [`bin/`](bin/README.md) | Scripts que van a `~/.local/bin` |
+| [`install.sh`](install.sh) | Deploys dotfiles and configures Umbriel, Noctalia and the apps; called by `porphyx setup` |
+| `porphyx/` | The `porphyx` command, `porphyx-setup.sh`, the AUR fallback installer and package lists |
+| `iso/` | ISO build: archiso profile, `porphyx-install`, branding |
+| [`config/`](config/README.md) | Dotfiles: Noctalia, Umbriel, foot, zsh, MangoHud (`config/niri` is legacy) |
+| [`bin/`](bin/README.md) | Scripts installed to `~/.local/bin` |
 | [`greeter-setup/`](greeter-setup/README.md) | greetd + noctalia-greeter |
-| `logind/` | Botón de apagado: pulsación corta bloquea y suspende, larga apaga |
-| [`docs/`](docs/) | [Instalación en detalle](docs/instalacion-detalle.md) y [notas de port a Odyssey](docs/notas-odyssey.md) |
-| [`alienware-setup/`](alienware-setup/README.md) | RGB para un Alienware, sin soporte |
+| `logind/` | Power button: short press locks and suspends, long press powers off |
+| [`docs/`](docs/) | Detailed install notes and the Odyssey port notes (in Spanish) |
+| [`alienware-setup/`](alienware-setup/README.md) | RGB for an Alienware, unsupported |
 
-## Limitaciones
+## Limitations
 
-- La base está fija para iGPU AMD y dGPU NVIDIA (`mesa`, `vulkan-radeon`, `nvidia-open`).
-- Solo UEFI con systemd-boot.
-- Umbriel y Noctalia siguen en desarrollo: pueden cambiar su esquema de configuración.
-- El port a Odyssey (Void, runit) está en curso y nada se ha probado ahí: ver
-  [docs/notas-odyssey.md](docs/notas-odyssey.md).
+- The base is fixed for an AMD iGPU and an NVIDIA dGPU (`mesa`, `vulkan-radeon`, `nvidia-open`).
+- UEFI with systemd-boot only.
+- Umbriel and Noctalia are under active development and their config schema may change.
+- The Odyssey port (Void, runit) is a work in progress and untested: see [docs/notas-odyssey.md](docs/notas-odyssey.md).
