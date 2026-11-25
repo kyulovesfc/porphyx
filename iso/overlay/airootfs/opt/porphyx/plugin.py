@@ -40,4 +40,14 @@ class Plugin:
             fcfg = fdest / "config.jsonc"
             if fcfg.exists():
                 fcfg.write_text(fcfg.read_text().replace("/root/.config/fastfetch/", "/etc/xdg/fastfetch/"))
+        # KYU-NM-COPY: hereda las conexiones de NetworkManager del live (evita un segundo nmtui en porphyx setup)
+        nm_src = Path("/etc/NetworkManager/system-connections")
+        if nm_src.is_dir() and any(nm_src.iterdir()):
+            nm_dest = target / "etc" / "NetworkManager" / "system-connections"
+            nm_dest.mkdir(parents=True, exist_ok=True)
+            nm_dest.chmod(0o700)
+            for nc in nm_src.iterdir():
+                if nc.is_file():
+                    shutil.copy2(nc, nm_dest / nc.name)
+                    (nm_dest / nc.name).chmod(0o600)
         return None
