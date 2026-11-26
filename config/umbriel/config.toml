@@ -56,6 +56,9 @@ center_focused = "never"
 position = "left"
 default_width_fraction = 0.5
 
+[layout.stacking]
+drop_zones = false
+
 [hot_corners.top_left]
 enabled = true
 delay_ms = 500
