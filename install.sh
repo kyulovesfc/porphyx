@@ -20,14 +20,11 @@ backup_and_copy() {
 echo "== RGB (Alienware) =="
 if [ "$(cat /sys/class/dmi/id/sys_vendor 2>/dev/null)" = "Alienware" ]; then
   install -Dm755 "$REPO_DIR/bin/alienware/alienfx.py" "$HOME/.local/bin/alienfx.py"
-  install -Dm755 "$REPO_DIR/bin/alienware/rgb-sync.py" "$HOME/.local/bin/rgb-sync.py"
   pacman -Qi python-pyusb >/dev/null 2>&1 || sudo pacman -S --needed --noconfirm python-pyusb
   echo "Regla udev: ver alienware-setup/ (requiere root, no automatico)."
 else
   echo "No es Alienware, se omite."
 fi
-backup_and_copy "$REPO_DIR/config/noctalia/scripts/rgb-sync-hook.sh" "$HOME/.config/noctalia/scripts/rgb-sync-hook.sh"
-chmod +x "$HOME/.config/noctalia/scripts/rgb-sync-hook.sh"
 
 echo "== Tema de cursor =="
 # El tema y el tamaño los define config/umbriel/config.toml ([input.cursor]).
@@ -64,8 +61,8 @@ sed -i "s|/home/kyu/|$HOME/|g" "$HOME/.config/noctalia/noctalia-full-config.toml
 # Overlay de hooks GPU/RGB: se carga al final (zz-) y solo pisa lo que declara,
 # asi convive con una config completa propia en ~/.config/noctalia/.
 backup_and_copy "$REPO_DIR/config/noctalia/zz-porphyx.toml" "$HOME/.config/noctalia/zz-porphyx.toml"
-sed -i "s|\"HOOK\"|\"$HOME/.config/noctalia/scripts/rgb-sync-hook.sh\"|g; s|\"HOME/|\"$HOME/|g" "$HOME/.config/noctalia/zz-porphyx.toml"
-if grep -q 'HOOK\|"HOME/' "$HOME/.config/noctalia/zz-porphyx.toml"; then
+sed -i "s|\"HOME/|\"$HOME/|g" "$HOME/.config/noctalia/zz-porphyx.toml"
+if grep -q '"HOME/' "$HOME/.config/noctalia/zz-porphyx.toml"; then
   echo "ERROR: placeholders sin sustituir en zz-porphyx.toml" >&2
   exit 1
 fi
@@ -76,9 +73,6 @@ sed -i "s|/home/kyu/|$HOME/|g" "$HOME/.config/noctalia/zz-settings.toml"
 
 backup_and_copy "$REPO_DIR/config/environment.d/10-path.conf" "$HOME/.config/environment.d/10-path.conf"
 
-backup_and_copy "$REPO_DIR/config/noctalia/kbd-color-sync.toml" "$HOME/.config/noctalia/kbd-color-sync.toml"
-sed -i "s|\"HOME/|\"$HOME/|g" "$HOME/.config/noctalia/kbd-color-sync.toml"
-grep -q '"HOME/' "$HOME/.config/noctalia/kbd-color-sync.toml" && { echo "ERROR: placeholder sin sustituir en kbd-color-sync.toml" >&2; exit 1; }
 
 # Pantalla de bloqueo compacta: el layout va por nombre de salida, se genera una entrada por monitor conectado.
 python3 - "$REPO_DIR/config/noctalia/lockscreen-widgets.toml" "$HOME/.config/noctalia/zz-lockscreen.toml" <<'GENEOF' || { echo "ERROR: no se pudo generar zz-lockscreen.toml" >&2; exit 1; }

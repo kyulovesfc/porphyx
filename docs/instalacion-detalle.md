@@ -26,7 +26,7 @@ Todo archivo que reemplaza se respalda como `archivo.bak.<timestamp>` antes de s
 - **Cursor**: paquete `capitaine-cursors`. El tema y el tamaño los gobierna
   `config/niri/cfg/cursor.kdl` (fuente única). En Umbriel el tema activo es
   `capitaine-cursors` (`config/umbriel/config.toml`); `cursor.kdl` es de niri y es legado.
-- **Noctalia**: `noctalia-full-config.toml` (bar, dock, tema) + overlay `zz-porphyx.toml` (hooks) + `kbd-color-sync.toml`
+- **Noctalia**: `noctalia-full-config.toml` (bar, dock, tema) + overlay `zz-porphyx.toml` (hooks)
   (sat=1.6 val=0.85).
 - **Luciole + papirus-icon-theme**: gestor de archivos e iconos; el recoloreo lo hace la plantilla `papirus-icons` de Noctalia.
 - **niri**: todos los `.kdl` de `config/niri/cfg/` + `config.kdl` (window-rules, blur).
@@ -52,8 +52,7 @@ su `sed` y su guardia que aborta si algo queda sin sustituir:
 
 | Placeholder | Archivos | Se reemplaza por |
 |---|---|---|
-| `"HOME/` | `noctalia/zz-porphyx.toml`, `noctalia/kbd-color-sync.toml` | `"$HOME/` |
-| `"HOOK"` | `noctalia/zz-porphyx.toml` | ruta a `rgb-sync-hook.sh` |
+| `"HOME/` | `noctalia/zz-porphyx.toml` | `"$HOME/` |
 
 **Al editar estos archivos, nunca commitear rutas absolutas.** `noctalia-full-config.toml`
 usa `/home/kyu/` como placeholder (`s|/home/kyu/|$HOME/|g`); los otros usan los de la tabla.
