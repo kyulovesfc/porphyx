@@ -129,7 +129,6 @@ action = "overview-open"
 "Mod+M" = { action = "workspace-set-layout toggle dwindle scrolling master stacking", repeat = false }
 "Mod+Alt+T" = "layout-toggle-split"
 "Mod+Z" = "scratchpad-toggle term"
-"Mod+Shift+Z" = { action = "window-toggle-scratchpad term", repeat = false }
 "Mod+Ctrl+E" = { action = "effect-border-toggle", repeat = false }
 
 "Mod+WheelDown" = { action = "workspace-next", cooldown_ms = 150 }
