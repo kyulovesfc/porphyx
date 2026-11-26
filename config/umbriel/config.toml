@@ -35,6 +35,7 @@ size = 48
 [appearance]
 prefer_no_csd = true
 corner_radius = 12
+drag_opacity = 1.0
 
 [appearance.blur]
 passes = 2
