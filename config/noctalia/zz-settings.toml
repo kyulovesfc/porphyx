@@ -42,10 +42,18 @@ order = [ "default", "Utilities" ]
     thickness = 33
 
     [bar.default]
+    capsule_radius = "auto"
+    concave_edge_corners = true
+    margin_ends = "1%"
+    radius = 80
+    radius_bottom_left = 80
+    radius_bottom_right = 80
+    radius_top_left = 80
+    radius_top_right = 80
     center = [ "settings", "spacer_1", "clock", "spacer_1", "bar" ]
     end = [ "battery", "spacer_1", "session", "spacer_1" ]
     scale = 1.1000000089406967
-    start = [ "spacer_1", "workspaces", "spacer_1", "privacy", "spacer_1", "media", "spacer_1" ]
+    start = [ "spacer_1", "workspaces", "spacer_1", "media", "spacer_1" ]
 
 [calendar]
 event_time_format = "{:%-I:%M:%S %p}"
@@ -116,6 +124,7 @@ time_format = "{:%-I:%M:%S %p}"
 umbriel_audio_provider_enabled = true
 
     [shell.launcher]
+    app_grid = true
     default_view = "categories"
     show_navigation_labels = false
     show_session_button = false
@@ -135,7 +144,7 @@ wallpaper_scheme = "dysfunctional"
 
     [theme.templates]
     builtin_ids = [ "btop", "cava", "foot", "luciole", "umbriel" ]
-    community_ids = [ "zen-browser", "discord", "vscode", "heroiclauncher", "thunar" ]
+    community_ids = [ "zen-browser", "vscode", "heroiclauncher", "prismlauncher", "fastfetch", "papirus-icons", "thunar" ]
 
 [wallpaper]
 transition = [ "fade" ]
@@ -216,5 +225,8 @@ show_label = false
 color = "primary"
 
 [widget.workspaces]
+capsule_border_width = 0.0
+scale = 1.25
+style = "focus_hint"
 capsule_radius = 12
 occupied_color = "primary_container"
