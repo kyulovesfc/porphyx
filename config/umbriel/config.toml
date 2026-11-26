@@ -123,10 +123,6 @@ action = "overview-open"
 "Mod+Shift+T" = { action = "column-toggle-tabbed", repeat = false }
 "Mod+O" = { action = "overview-toggle", repeat = false }
 "Mod+P" = { action = "window-toggle-pinned", repeat = false }
-"Mod+Minus" = "window-modify-primary-extent -0.02"
-"Mod+Equal" = "window-modify-primary-extent +0.02"
-"Mod+Ctrl+Minus" = "window-modify-secondary-extent -0.02"
-"Mod+Ctrl+Equal" = "window-modify-secondary-extent +0.02"
 "Mod+W" = { action = "window-modify-primary-extent +0.02", repeat = true }
 "Mod+Shift+W" = { action = "window-modify-primary-extent -0.02", repeat = true }
 "Mod+L" = { action = "window-modify-secondary-extent +0.02", repeat = true }
