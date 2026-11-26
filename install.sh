@@ -263,6 +263,13 @@ pacman -Qi lavat &>/dev/null || { need_paru; paru -S --needed --noconfirm --skip
 for f in "$REPO_DIR"/config/applications/porphyx-*.desktop; do
   backup_and_copy "$f" "$HOME/.local/share/applications/$(basename "$f")"
 done
+# Zen: Papirus dibuja el logo naranja viejo; apuntar al PNG oficial del paquete
+ZEN_SRC=/usr/share/applications/zen.desktop
+ZEN_PNG=/usr/share/icons/hicolor/128x128/apps/zen-browser.png
+if [ -f "$ZEN_SRC" ] && [ -f "$ZEN_PNG" ]; then
+  mkdir -p "$HOME/.local/share/applications"
+  sed "s|^Icon=zen-browser\$|Icon=$ZEN_PNG|" "$ZEN_SRC" > "$HOME/.local/share/applications/zen.desktop"
+fi
 update-desktop-database "$HOME/.local/share/applications" 2>/dev/null
 
 # FileManager1: Luciole sobre Nautilus. El .service del paquete tiene nombre incorrecto y el de Nautilus es del sistema;
