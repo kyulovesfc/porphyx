@@ -34,7 +34,7 @@ size = 48
 
 [appearance]
 prefer_no_csd = true
-corner_radius = 0
+corner_radius = 12
 
 [appearance.blur]
 passes = 2
@@ -126,7 +126,7 @@ action = "overview-open"
 "Mod+Equal" = "window-modify-primary-extent +0.02"
 "Mod+Ctrl+Minus" = "window-modify-secondary-extent -0.02"
 "Mod+Ctrl+Equal" = "window-modify-secondary-extent +0.02"
-"Mod+M" = { action = "workspace-set-layout toggle dwindle scrolling master", repeat = false }
+"Mod+M" = { action = "workspace-set-layout toggle dwindle scrolling master stacking", repeat = false }
 "Mod+Alt+T" = "layout-toggle-split"
 "Mod+Z" = "scratchpad-toggle term"
 "Mod+Shift+Z" = { action = "window-toggle-scratchpad term", repeat = false }

@@ -216,4 +216,5 @@ show_label = false
 color = "primary"
 
 [widget.workspaces]
+capsule_radius = 12
 occupied_color = "primary_container"
