@@ -230,7 +230,7 @@ sudo install -Dm644 "$REPO_DIR/logind/50-porphyx-powerkey.conf" /etc/systemd/log
 sudo systemctl kill -s HUP systemd-logind
 
 # KYU-TERMINAL-APPS
-echo "== Apps de terminal (cava, cmatrix, lavat, playerctl) =="
+echo "== Apps de terminal (cava, cmatrix, lavat, tty-clock, playerctl) =="
 for pkg in cava cmatrix playerctl; do
   pacman -Qi "$pkg" &>/dev/null || sudo pacman -S --needed --noconfirm "$pkg"
 done
@@ -241,6 +241,7 @@ if [ ! -f "$HOME/.config/cava/config" ]; then
 fi
 # KYU-LAVAT
 pacman -Qi lavat &>/dev/null || { need_paru; paru -S --needed --noconfirm --skipreview lavat; }
+pacman -Qi tty-clock &>/dev/null || { need_paru; paru -S --needed --noconfirm --skipreview tty-clock || echo "AVISO: tty-clock no se instalo" >&2; }
 for f in "$REPO_DIR"/config/applications/porphyx-*.desktop; do
   backup_and_copy "$f" "$HOME/.local/share/applications/$(basename "$f")"
 done

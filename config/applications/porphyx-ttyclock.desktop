@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=TTY-Clock
+Comment=Reloj digital en terminal
+Exec=foot --app-id=porphyx-ttyclock --title=TTY-Clock tty-clock -sc -C 5
+Icon=utilities-terminal
+Categories=System;Utility;
+Keywords=ttyclock;tty-clock;reloj;clock;
