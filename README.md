@@ -110,7 +110,6 @@ Everything must be committed: `porphyx/porphyx` is taken from `HEAD`.
 | [`greeter-setup/`](greeter-setup/README.md) | greetd + noctalia-greeter |
 | `logind/` | Power button: short press locks and suspends, long press powers off |
 | [`docs/`](docs/) | Detailed install notes and the Odyssey port notes (in Spanish) |
-| [`alienware-setup/`](alienware-setup/README.md) | RGB for an Alienware, unsupported |
 
 ## Limitations
 

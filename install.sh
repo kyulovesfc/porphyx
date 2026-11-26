@@ -17,15 +17,6 @@ backup_and_copy() {
   fi
 }
 
-echo "== RGB (Alienware) =="
-if [ "$(cat /sys/class/dmi/id/sys_vendor 2>/dev/null)" = "Alienware" ]; then
-  install -Dm755 "$REPO_DIR/bin/alienware/alienfx.py" "$HOME/.local/bin/alienfx.py"
-  pacman -Qi python-pyusb >/dev/null 2>&1 || sudo pacman -S --needed --noconfirm python-pyusb
-  echo "Regla udev: ver alienware-setup/ (requiere root, no automatico)."
-else
-  echo "No es Alienware, se omite."
-fi
-
 echo "== Tema de cursor =="
 # El tema y el tamaño los define config/umbriel/config.toml ([input.cursor]).
 # Acá solo se garantiza que el paquete esté instalado.
