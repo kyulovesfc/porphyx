@@ -10,7 +10,6 @@ Dotfiles que `install.sh` despliega. Cada carpeta es un módulo independiente.
 | `zsh/` | `zshrc` y `p10k.zsh` | Vigente |
 | `applications/` | Entradas de launcher: cava, cmatrix y lavat. Van a `~/.local/share/applications` | Vigente |
 | `environment.d/` | `10-path.conf` | Vigente |
-| `niri/` | `config.kdl` y `cfg/` | Legado: niri solo es la base de CachyOS |
 
 Noctalia carga todos los `*.toml` de `~/.config/noctalia/` en orden alfabético; por eso el overlay
 se llama `zz-` y solo pisa lo que declara. Las reglas de placeholders de rutas están en

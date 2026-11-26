@@ -2,7 +2,7 @@
 
 Referencia detallada. El indice del repo esta en [../README.md](../README.md).
 
-Dotfiles y scripts del entorno Noctalia v5 + Umbriel de Porphyx. Config y scripts de GPU PRIME.
+Dotfiles y scripts del entorno Noctalia v5 + Umbriel de Porphyx.
 
 ## Instalación rápida (cualquier máquina, sin llave SSH)
 
@@ -23,13 +23,10 @@ Todo archivo que reemplaza se respalda como `archivo.bak.<timestamp>` antes de s
 
 ## Qué instala `install.sh`
 
-- **Cursor**: paquete `capitaine-cursors`. El tema y el tamaño los gobierna
-  `config/niri/cfg/cursor.kdl` (fuente única). En Umbriel el tema activo es
-  `capitaine-cursors` (`config/umbriel/config.toml`); `cursor.kdl` es de niri y es legado.
-- **Noctalia**: `noctalia-full-config.toml` (bar, dock, tema) + overlay `zz-porphyx.toml` (hooks)
-  (sat=1.6 val=0.85).
+- **Cursor**: paquete `capitaine-cursors`. El tema y el tamaño los define
+  `config/umbriel/config.toml` (`[input.cursor]`).
+- **Noctalia**: `noctalia-full-config.toml` (bar, dock, tema) + overlay `zz-porphyx.toml` (hook de arranque y greeter).
 - **Luciole + papirus-icon-theme**: gestor de archivos e iconos; el recoloreo lo hace la plantilla `papirus-icons` de Noctalia.
-- **niri**: todos los `.kdl` de `config/niri/cfg/` + `config.kdl` (window-rules, blur).
 - **Zsh**: paquete + `cachyos-zsh-config` + zoxide + eza + `.zshrc`/`.p10k.zsh`, y cambia la
   shell por defecto del usuario (`chsh`, pide password del usuario).
 - **Completions de noctalia**: `noctalia completions zsh` →
@@ -39,9 +36,9 @@ Todo archivo que reemplaza se respalda como `archivo.bak.<timestamp>` antes de s
   `fpath` antes de `cachyos-config.zsh`, que es quien corre `compinit`; si se mueve esa
   línea después, las completions dejan de cargar en silencio.
 - **Foot**: paquete + config + tema dinámico Noctalia.
-- **Zen Browser**: paquete `zen-browser-bin` (AUR; en CachyOS viene del repo `cachyos`).
-- **Umbriel** (compositor principal): `umbriel-git` + `xdg-desktop-portal-umbriel-git` desde AUR con paru; `config/umbriel/config.toml` → `~/.config/umbriel/` (portado de `config/niri/cfg`; layout dwindle por defecto, `Mod+M` alterna master/scrolling) y `drm.toml` solo en ASUS con `dgpu_disable` (excluye la dGPU, equivalente al `ignore-drm-device` de niri). Es el entorno principal: el instalador ofrece eliminar otros entornos instalados (pide confirmacion).
-- **Scripts** de `bin/` → `~/.local/bin/` (porphyx-gpu-prime, porphyx-gpu-launch, porphyx-gpu-flatpak-sync).
+- **Zen Browser**: paquete `zen-browser-bin` (AUR).
+- **Umbriel** (compositor principal): `umbriel-git` + `xdg-desktop-portal-umbriel-git` desde AUR con paru; `config/umbriel/config.toml` → `~/.config/umbriel/` (layout dwindle por defecto, `Mod+M` alterna master/scrolling) y `drm.toml` solo en ASUS con `dgpu_disable` (excluye la dGPU, equivalente al `ignore-drm-device` de niri). Es el entorno principal: el instalador ofrece eliminar otros entornos instalados (pide confirmacion).
+- **Scripts** de `bin/` → `~/.local/bin/` (porphyx-plugins, rotate-backups.sh, umbriel-keybinds).
 
 ## Placeholders de rutas
 
@@ -74,7 +71,7 @@ tocar el display manager del sistema, o dependen de contexto que varía por máq
 
 ## Estructura
 
-- `config/`: dotfiles (noctalia, niri, umbriel, foot, zsh)
+- `config/`: dotfiles (noctalia, umbriel, foot, zsh)
 - `bin/`: scripts desplegados a `~/.local/bin`
 - `greeter-setup/`: greetd + noctalia-greeter
 - Imagenes: `config/wallpapers/` las trae; `install.sh` las copia a `~/Pictures/Wallpapers/` (sin pisar las

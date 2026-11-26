@@ -105,15 +105,14 @@ Everything must be committed: `porphyx/porphyx` is taken from `HEAD`.
 | [`install.sh`](install.sh) | Deploys dotfiles and configures Umbriel, Noctalia and the apps; called by `porphyx setup` |
 | `porphyx/` | The `porphyx` command, `porphyx-setup.sh`, the AUR fallback installer and package lists |
 | `iso/` | ISO build: archiso profile, `porphyx-install`, branding |
-| [`config/`](config/README.md) | Dotfiles: Noctalia, Umbriel, foot, zsh (`config/niri` is legacy) |
+| [`config/`](config/README.md) | Dotfiles: Noctalia, Umbriel, foot, zsh |
 | [`bin/`](bin/README.md) | Scripts installed to `~/.local/bin` |
 | [`greeter-setup/`](greeter-setup/README.md) | greetd + noctalia-greeter |
 | `logind/` | Power button: short press locks and suspends, long press powers off |
-| [`docs/`](docs/) | Detailed install notes and the Odyssey port notes (in Spanish) |
+| [`docs/`](docs/) | Detailed install notes (in Spanish) |
 
 ## Limitations
 
 - The base is fixed for an AMD iGPU and an NVIDIA dGPU (`mesa`, `vulkan-radeon`, `nvidia-open`).
 - UEFI with systemd-boot only.
 - Umbriel and Noctalia are under active development and their config schema may change.
-- The Odyssey port (Void, runit) is a work in progress and untested: see [docs/notas-odyssey.md](docs/notas-odyssey.md).
