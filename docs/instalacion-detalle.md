@@ -37,7 +37,7 @@ Todo archivo que reemplaza se respalda como `archivo.bak.<timestamp>` antes de s
   línea después, las completions dejan de cargar en silencio.
 - **Foot**: paquete + config + tema dinámico Noctalia.
 - **Zen Browser**: paquete `zen-browser-bin` (AUR).
-- **Umbriel** (compositor principal): `umbriel-git` + `xdg-desktop-portal-umbriel-git` desde AUR con paru; `config/umbriel/config.toml` → `~/.config/umbriel/` (layout dwindle por defecto, `Mod+M` alterna master/scrolling) y `drm.toml` solo en ASUS con `dgpu_disable` (excluye la dGPU, equivalente al `ignore-drm-device` de niri). Es el entorno principal: el instalador ofrece eliminar otros entornos instalados (pide confirmacion).
+- **Umbriel** (compositor principal): `umbriel-git` + `xdg-desktop-portal-umbriel-git` desde AUR con paru; `config/umbriel/config.toml` → `~/.config/umbriel/` (layout dwindle por defecto, `Mod+M` alterna master/scrolling) y `drm.toml` solo en ASUS con `dgpu_disable` (excluye la dGPU). Es el entorno principal: el instalador ofrece eliminar otros entornos instalados (pide confirmacion).
 - **Scripts** de `bin/` → `~/.local/bin/` (porphyx-plugins, rotate-backups.sh, umbriel-keybinds).
 
 ## Placeholders de rutas

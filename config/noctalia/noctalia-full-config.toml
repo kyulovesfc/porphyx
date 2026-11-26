@@ -800,7 +800,6 @@ hide_when_single_layout = false
 type = "keyboard_layout"
 
 [widget.launcher]
-custom_image = "/usr/share/odyssey/odyssey-logo.png"
 type = "launcher"
 
 [widget.lock_keys]
