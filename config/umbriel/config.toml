@@ -247,7 +247,6 @@ border = "pulse"
 
 [[scratchpad]]
 name = "term"
-spawn_when_empty = "foot --app-id scratchterm"
 
 [[window_rule]]
 match.app_id = "^scratchterm$"
