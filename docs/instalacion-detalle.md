@@ -41,8 +41,7 @@ Todo archivo que reemplaza se respalda como `archivo.bak.<timestamp>` antes de s
 - **Foot**: paquete + config + tema dinámico Noctalia.
 - **Zen Browser**: paquete `zen-browser-bin` (AUR; en CachyOS viene del repo `cachyos`).
 - **Umbriel** (compositor principal): `umbriel-git` + `xdg-desktop-portal-umbriel-git` desde AUR con paru; `config/umbriel/config.toml` → `~/.config/umbriel/` (portado de `config/niri/cfg`; layout dwindle por defecto, `Mod+M` alterna master/scrolling) y `drm.toml` solo en ASUS con `dgpu_disable` (excluye la dGPU, equivalente al `ignore-drm-device` de niri). Es el entorno principal: el instalador ofrece eliminar otros entornos instalados (pide confirmacion).
-- **Scripts** de `bin/` → `~/.local/bin/` (kbd-color-sync,
-  porphyx-gpu-prime, porphyx-gpu-launch, porphyx-gpu-flatpak-sync).
+- **Scripts** de `bin/` → `~/.local/bin/` (porphyx-gpu-prime, porphyx-gpu-launch, porphyx-gpu-flatpak-sync).
 
 ## Placeholders de rutas
 
