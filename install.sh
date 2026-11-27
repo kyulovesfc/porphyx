@@ -261,6 +261,13 @@ if [ -x /usr/bin/luciole ]; then
   printf '[D-BUS Service]\nName=org.freedesktop.FileManager1\nExec=/usr/bin/luciole --file-manager-service\n' > "$HOME/.local/share/dbus-1/services/org.freedesktop.FileManager1.service"
 fi
 
+echo "== Fastfetch (logo y config del sistema) =="
+FF_SRC="$REPO_DIR/iso/overlay/airootfs/root/.config/fastfetch"
+if [ -f "$FF_SRC/config.jsonc" ] && [ -f "$FF_SRC/logo.txt" ]; then
+  sudo install -Dm644 "$FF_SRC/logo.txt" /etc/xdg/fastfetch/logo.txt
+  sed "s|/root/.config/fastfetch/|/etc/xdg/fastfetch/|g" "$FF_SRC/config.jsonc" | sudo tee /etc/xdg/fastfetch/config.jsonc >/dev/null
+fi
+
 echo "== Scripts .local/bin =="
 mkdir -p "$HOME/.local/bin"
 for f in "$REPO_DIR"/bin/*; do
