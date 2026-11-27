@@ -126,6 +126,7 @@ Timeshift takes system snapshots so you can roll back after a bad update or chan
   - `sudo timeshift --create --comments "before X"`: take one manually
   - `sudo timeshift --restore`: restore one interactively
 - Restoring does not touch files outside the snapshot. If the system will not boot, restore from the live ISO.
+- `/boot` is the EFI partition (FAT), so kernels are not part of btrfs snapshots. A pacman hook (`config/pacman-hooks/95-porphyx-bootbackup.hook`) copies `/boot` to `/.bootbackup` after every kernel change, and that copy is inside each snapshot. After restoring a snapshot, put the matching kernel back with `sudo rsync -rt --delete /.bootbackup/ /boot/` and reboot.
 
 ## Limitations
 

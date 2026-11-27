@@ -49,4 +49,10 @@ else
 fi
 chmod 644 /etc/cron.d/timeshift-hourly /etc/cron.d/timeshift-boot 2>/dev/null || true
 echo "+ /etc/cron.d/timeshift-*"
+# /boot (ESP, FAT) queda fuera de los snapshots btrfs: se copia a /.bootbackup (dentro de @) con un hook de pacman
+if [ "$BTRFS" = true ] && [ "$ROOT_FS" = btrfs ] && [ "$(findmnt -no FSTYPE /boot 2>/dev/null || true)" = vfat ]; then
+  install -Dm644 "$REPO/config/pacman-hooks/95-porphyx-bootbackup.hook" /etc/pacman.d/hooks/95-porphyx-bootbackup.hook
+  rsync -rt --delete /boot/ /.bootbackup/
+  echo "+ hook bootbackup + copia inicial de /boot en /.bootbackup"
+fi
 echo "✓ timeshift listo (los horarios los decide timeshift.json)"
