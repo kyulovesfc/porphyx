@@ -11,3 +11,4 @@ networkmanager bluez bluez-utils pipewire pipewire-pulse wireplumber power-profi
 btop nvtop fastfetch code kate vlc discord steam wine supertuxkart
 # Imagenes
 loupe
+otf-opendyslexic-nerd
