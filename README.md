@@ -116,6 +116,7 @@ Everything must be committed: `porphyx/porphyx` is taken from `HEAD`.
 Timeshift takes system snapshots so you can roll back after a bad update or change. It does **not** back up personal files.
 
 - Installed from `porphyx/official-packages.txt`. Configured by `porphyx/timeshift-setup.sh`, which runs at the end of `porphyx setup`, using the template `config/timeshift/timeshift.json.in`.
+- Scheduling uses cron: the script enables `cronie` and writes `/etc/cron.d/timeshift-hourly` (checks every hour whether a daily/weekly snapshot is due) and `/etc/cron.d/timeshift-boot` (snapshot 10 minutes after boot).
 - Mode is detected automatically: BTRFS if `/` is btrfs, RSYNC otherwise.
 - Default schedule: daily (keep 5), weekly (keep 3) and on boot (keep 5). Hourly and monthly are off. Change it in `/etc/timeshift/timeshift.json` or with `sudo timeshift-gtk`.
 - Excluded from snapshots: `~/.cache`, the Trash and the pacman package cache.
