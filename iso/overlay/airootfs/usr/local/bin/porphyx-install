@@ -19,4 +19,6 @@ echo "Preparando keyring del live..."
 for _ in $(seq 1 120); do systemctl is-active --quiet pacman-init.service && break; sleep 1; done
 systemctl is-active --quiet pacman-init.service || echo "AVISO: pacman-init no termino, el keyring del live puede no estar listo" >&2
 # --skip-ntp/--skip-wkd: el live no espera la sincronizacion de hora ni consulta WKD; el sistema instalado si activa NTP (gen-config.py).
-exec archinstall --skip-ntp --skip-wkd --plugin /opt/porphyx/plugin.py --config /opt/porphyx/archinstall.json "$@"
+# KYU-GPU-DETECT: ajusta los paquetes de GPU al hardware real (sin pciutils; lee /sys)
+python3 /opt/porphyx/gpu-config.py /opt/porphyx/archinstall.json /tmp/porphyx-archinstall.json || cp /opt/porphyx/archinstall.json /tmp/porphyx-archinstall.json
+exec archinstall --skip-ntp --skip-wkd --plugin /opt/porphyx/plugin.py --config /tmp/porphyx-archinstall.json "$@"
