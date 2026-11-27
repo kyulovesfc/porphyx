@@ -235,10 +235,10 @@ for pkg in cava cmatrix playerctl; do
   pacman -Qi "$pkg" &>/dev/null || sudo pacman -S --needed --noconfirm "$pkg"
 done
 # KYU-CAVA-CONFIG: el template de noctalia exige que exista ~/.config/cava/config
-if [ ! -f "$HOME/.config/cava/config" ]; then
-  mkdir -p "$HOME/.config/cava"
-  [ -f "$HOME/.config/cava/config" ] || printf '[general]\n' > "$HOME/.config/cava/config"
-fi
+mkdir -p "$HOME/.config/cava"
+[ -f "$HOME/.config/cava/config" ] || printf '[general]\n' > "$HOME/.config/cava/config"
+# method=pipewire de cava se congela con PipeWire 1.6.x; pulse (via pipewire-pulse) funciona
+grep -q '^\[input\]' "$HOME/.config/cava/config" || printf '\n[input]\nmethod = pulse\nsource = auto\n' >> "$HOME/.config/cava/config"
 # KYU-LAVAT
 pacman -Qi lavat &>/dev/null || { need_paru; paru -S --needed --noconfirm --skipreview lavat; }
 pacman -Qi tty-clock &>/dev/null || { need_paru; paru -S --needed --noconfirm --skipreview tty-clock || echo "AVISO: tty-clock no se instalo" >&2; }
