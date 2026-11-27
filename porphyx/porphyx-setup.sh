@@ -71,7 +71,4 @@ PATH="$TMPBIN:$PATH" bash "$REPO/install.sh"
 echo "== noctalia-greeter =="
 bash "$REPO/greeter-setup/install-greeter.sh"
 
-echo "== Timeshift =="
-sudo bash "$HERE/timeshift-setup.sh"
-
 echo "✓ porphyx setup terminado — reinicia para entrar por el greeter"

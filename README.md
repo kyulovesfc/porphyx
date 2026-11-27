@@ -111,23 +111,6 @@ Everything must be committed: `porphyx/porphyx` is taken from `HEAD`.
 | `logind/` | Power button: short press locks and suspends, long press powers off |
 | [`docs/`](docs/) | Detailed install notes (in Spanish) |
 
-## Snapshots (Timeshift)
-
-Timeshift takes system snapshots so you can roll back after a bad update or change. It does **not** back up personal files.
-
-- Installed from `porphyx/official-packages.txt`. Configured by `porphyx/timeshift-setup.sh`, which runs at the end of `porphyx setup`, using the template `config/timeshift/timeshift.json.in`.
-- Scheduling uses cron: the script enables `cronie` and writes `/etc/cron.d/timeshift-hourly` (checks every hour whether a daily/weekly snapshot is due) and `/etc/cron.d/timeshift-boot` (snapshot 10 minutes after boot).
-- Mode is detected automatically: BTRFS if `/` is btrfs, RSYNC otherwise.
-- Default schedule: daily (keep 5), weekly (keep 3) and on boot (keep 5). Hourly and monthly are off. Change it in `/etc/timeshift/timeshift.json` or with `sudo timeshift-gtk`.
-- Excluded from snapshots: `~/.cache`, the Trash and the pacman package cache.
-- An existing `/etc/timeshift/timeshift.json` with at least one schedule enabled is never overwritten. One with no schedules (Timeshift's own default) is backed up to `timeshift.json.bak.<epoch>` and replaced.
-- Useful commands:
-  - `sudo timeshift --list`: list snapshots
-  - `sudo timeshift --create --comments "before X"`: take one manually
-  - `sudo timeshift --restore`: restore one interactively
-- Restoring does not touch files outside the snapshot. If the system will not boot, restore from the live ISO.
-- `/boot` is the EFI partition (FAT), so kernels are not part of btrfs snapshots. A pacman hook (`config/pacman-hooks/95-porphyx-bootbackup.hook`) copies `/boot` to `/.bootbackup` after every kernel change, and that copy is inside each snapshot. After restoring a snapshot, put the matching kernel back with `sudo rsync -rt --delete /.bootbackup/ /boot/` and reboot.
-
 ## Limitations
 
 - The base is fixed for an AMD iGPU and an NVIDIA dGPU (`mesa`, `vulkan-radeon`, `nvidia-open`).
