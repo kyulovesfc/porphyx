@@ -261,3 +261,7 @@ pointer_response = 0.8
 max_displacement_px = 80.0
 settle_after_pause_s = 0.25
 
+
+# Vista previa de insercion del overview: primary de la paleta al 12%
+[colors]
+insert_hint = "#8d00b51f"
