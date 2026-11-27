@@ -18,9 +18,13 @@ ROOT_UUID="$(findmnt -no UUID /)"
 if [ "$ROOT_FS" = btrfs ]; then BTRFS=true; else BTRFS=false; fi
 
 install -d -m 755 /etc/timeshift
-if [ -f "$DEST" ]; then
-  echo "= $DEST ya existe, no lo toco"
+if [ -f "$DEST" ] && grep -q '"schedule_[a-z]*" : "true"' "$DEST"; then
+  echo "= $DEST ya tiene horarios activos, no lo toco"
 else
+  if [ -f "$DEST" ]; then
+    cp -a "$DEST" "$DEST.bak.$(date +%s)"
+    echo "= config por defecto de timeshift respaldada en $DEST.bak.*"
+  fi
   sed -e "s/@UUID@/$ROOT_UUID/" -e "s/@BTRFS@/$BTRFS/" "$TEMPLATE" > "$DEST"
   python3 -m json.tool "$DEST" >/dev/null || { rm -f "$DEST"; echo "ABORT: json invalido" >&2; exit 1; }
   chmod 644 "$DEST"

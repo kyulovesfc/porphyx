@@ -120,7 +120,7 @@ Timeshift takes system snapshots so you can roll back after a bad update or chan
 - Mode is detected automatically: BTRFS if `/` is btrfs, RSYNC otherwise.
 - Default schedule: daily (keep 5), weekly (keep 3) and on boot (keep 5). Hourly and monthly are off. Change it in `/etc/timeshift/timeshift.json` or with `sudo timeshift-gtk`.
 - Excluded from snapshots: `~/.cache`, the Trash and the pacman package cache.
-- An existing `/etc/timeshift/timeshift.json` is never overwritten.
+- An existing `/etc/timeshift/timeshift.json` with at least one schedule enabled is never overwritten. One with no schedules (Timeshift's own default) is backed up to `timeshift.json.bak.<epoch>` and replaced.
 - Useful commands:
   - `sudo timeshift --list`: list snapshots
   - `sudo timeshift --create --comments "before X"`: take one manually
