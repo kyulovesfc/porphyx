@@ -29,7 +29,7 @@ follows_mouse = true
 hover_raises = true
 
 [input.cursor]
-theme = "capitaine-cursors"
+theme = "Skyrim-by-ru5tyshark-cursors"
 size = 48
 
 [appearance]

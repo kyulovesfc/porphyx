@@ -32,6 +32,12 @@ fi
 
 # KYU-PALETTE-INSTALL
 # Paleta Kyu_Pallete y config completa de Noctalia (rutas /home/kyu resueltas a $HOME).
+# Cursor Skyrim (assets/cursors) -> ~/.local/share/icons; no pisa una instalacion existente
+mkdir -p "$HOME/.local/share/icons"
+for d in "$REPO_DIR"/assets/cursors/*/; do
+  [ -d "$d" ] || continue
+  [ -e "$HOME/.local/share/icons/$(basename "$d")" ] || cp -r "$d" "$HOME/.local/share/icons/"
+done
 # KYU-ASSETS
 # Fondos y avatar en ~/Pictures/Wallpapers (ruta fija en ingles); las imagenes vienen en config/wallpapers.
 mkdir -p "$HOME/Pictures/Wallpapers"
