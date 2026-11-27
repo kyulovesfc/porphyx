@@ -111,6 +111,21 @@ Everything must be committed: `porphyx/porphyx` is taken from `HEAD`.
 | `logind/` | Power button: short press locks and suspends, long press powers off |
 | [`docs/`](docs/) | Detailed install notes (in Spanish) |
 
+## Snapshots (Timeshift)
+
+Timeshift takes system snapshots so you can roll back after a bad update or change. It does **not** back up personal files.
+
+- Installed from `porphyx/official-packages.txt`. Configured by `porphyx/timeshift-setup.sh`, which runs at the end of `porphyx setup`, using the template `config/timeshift/timeshift.json.in`.
+- Mode is detected automatically: BTRFS if `/` is btrfs, RSYNC otherwise.
+- Default schedule: daily (keep 5), weekly (keep 3) and on boot (keep 5). Hourly and monthly are off. Change it in `/etc/timeshift/timeshift.json` or with `sudo timeshift-gtk`.
+- Excluded from snapshots: `~/.cache`, the Trash and the pacman package cache.
+- An existing `/etc/timeshift/timeshift.json` is never overwritten.
+- Useful commands:
+  - `sudo timeshift --list`: list snapshots
+  - `sudo timeshift --create --comments "before X"`: take one manually
+  - `sudo timeshift --restore`: restore one interactively
+- Restoring does not touch files outside the snapshot. If the system will not boot, restore from the live ISO.
+
 ## Limitations
 
 - The base is fixed for an AMD iGPU and an NVIDIA dGPU (`mesa`, `vulkan-radeon`, `nvidia-open`).
