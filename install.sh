@@ -19,8 +19,7 @@ backup_and_copy() {
 
 echo "== Tema de cursor =="
 # El tema y el tamaño los define config/umbriel/config.toml ([input.cursor]).
-# Acá solo se garantiza que el paquete esté instalado.
-pacman -Qi capitaine-cursors >/dev/null 2>&1 || sudo pacman -S --needed capitaine-cursors
+# El cursor Skyrim se copia mas abajo (assets/cursors).
 
 echo "== Config Noctalia =="
 # La config es noctalia-full-config.toml mas el overlay zz-porphyx.toml (se despliegan abajo).

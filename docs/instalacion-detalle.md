@@ -24,7 +24,7 @@ Todo archivo que reemplaza se respalda como `archivo.bak.<timestamp>` antes de s
 ## Qué instala `install.sh`
 
 - **Cursor**: tema Skyrim (`assets/cursors/`, creditos en `assets/cursors/CREDITS.md`), que `install.sh` copia a `~/.local/share/icons/`. El tema y el tamaño los define
-  `config/umbriel/config.toml` (`[input.cursor]`). `capitaine-cursors` queda instalado como respaldo.
+  `config/umbriel/config.toml` (`[input.cursor]`).
 - **Noctalia**: `noctalia-full-config.toml` (bar, dock, tema) + overlay `zz-porphyx.toml` (hook de arranque y greeter).
 - **Luciole + papirus-icon-theme**: gestor de archivos e iconos; el recoloreo lo hace la plantilla `papirus-icons` de Noctalia.
 - **Zsh**: paquete + `cachyos-zsh-config` + zoxide + eza + `.zshrc`/`.p10k.zsh`, y cambia la
