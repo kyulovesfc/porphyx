@@ -50,4 +50,10 @@ class Plugin:
                 if nc.is_file():
                     shutil.copy2(nc, nm_dest / nc.name)
                     (nm_dest / nc.name).chmod(0o600)
+        # KYU-SELECTION: apps/desktops chosen in the installer; porphyx setup reads them
+        sel = Path("/tmp/porphyx-selection.env")
+        if sel.is_file():
+            sdest = target / "var" / "lib" / "porphyx"
+            sdest.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(sel, sdest / "selection.env")
         return None

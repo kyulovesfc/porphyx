@@ -16,7 +16,7 @@ sed -i 's|^iso_name=.*|iso_name="porphyx"|; s|^iso_application=.*|iso_applicatio
 
 A="$W/profile/airootfs/opt/porphyx"
 mkdir -p "$A"
-git -C "$REPO_DIR" archive --format=tar HEAD porphyx/porphyx | tar -x -C "$A" --strip-components=1
+git -C "$REPO_DIR" archive --format=tar HEAD porphyx/porphyx porphyx/porphyx-select.sh porphyx/select-apps.sh porphyx/select-desktop.sh porphyx/categories.conf porphyx/desktops.conf | tar -x -C "$A" --strip-components=1
 # KYU-ISO-CFG
 python3 "$HERE/gen-config.py" "$HERE" "$A/archinstall.json"
 cp -a "$HERE/overlay/." "$W/profile/"

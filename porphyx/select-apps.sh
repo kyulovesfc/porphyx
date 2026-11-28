@@ -7,6 +7,11 @@ select_apps() {
   local -a cats=() list=()
   local -A items=() tagmap=()
   SEL=()
+  if [ -n "${PORPHYX_APPS+x}" ]; then
+    read -ra SEL <<< "$PORPHYX_APPS"
+    echo "Apps selected (${#SEL[@]}): ${SEL[*]:-none}"
+    return 0
+  fi
   while IFS='|' read -r cat pkg desc def; do
     case "${cat:-}" in ''|'#'*) continue ;; esac
     case " ${cats[*]:-} " in *" $cat "*) ;; *) cats+=("$cat") ;; esac

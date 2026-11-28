@@ -28,6 +28,12 @@ echo "ok"
 
 echo "== Official packages =="
 mapfile -t PKGS < <(sed "s/#.*//" "$HERE/official-packages.txt" | tr -s " \t" "\n" | grep -v "^$")
+# KYU-SAVED-SELECTION: apps and desktops chosen in the installer (PORPHYX_RESELECT=1 to choose again)
+SELFILE=/var/lib/porphyx/selection.env
+if [ -z "${PORPHYX_RESELECT:-}" ] && [ -r "$SELFILE" ]; then
+  . "$SELFILE"
+  echo "Using the selection saved by the installer."
+fi
 # KYU-APPS: optional apps by category (categories.conf)
 . "$HERE/select-apps.sh"
 select_apps
