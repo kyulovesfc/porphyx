@@ -208,6 +208,7 @@ backup_and_copy "$REPO_DIR/config/umbriel/config.toml" "$HOME/.config/umbriel/co
 printf '# sin politica DRM propia\n' > "$HOME/.config/umbriel/drm.toml"
 mkdir -p "$HOME/.config/umbriel/effects"
 cp -a "$REPO_DIR/config/umbriel/effects/." "$HOME/.config/umbriel/effects/"
+grep -qv "^#" "$HOME/.config/umbriel/outputs.toml" 2>/dev/null || cp "$REPO_DIR/config/umbriel/outputs.toml" "$HOME/.config/umbriel/outputs.toml"
 # outputs.toml y noctalia.toml van en [include.optional], pero sin ellos la validacion falla; Noctalia reescribe noctalia.toml.
 for _f in outputs.toml noctalia.toml; do
   [ -e "$HOME/.config/umbriel/$_f" ] || printf '# placeholder creado por install.sh\n' > "$HOME/.config/umbriel/$_f"
