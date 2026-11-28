@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
-# porphyx-setup.sh — segunda etapa: Umbriel + Noctalia + Luciole + noctalia-greeter + dotfiles (install.sh).
+# porphyx-setup.sh — second stage: Umbriel + Noctalia + Luciole + noctalia-greeter + dotfiles (install.sh).
 set -Eeuo pipefail
 trap 'echo "ERROR: linea $LINENO: $BASH_COMMAND" >&2' ERR
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO="$(cd "$HERE/.." && pwd)"
 export PORPHYX=1
 die() { echo "ABORT: $*" >&2; exit 1; }
-[ "$(id -u)" -ne 0 ] || die "corre como tu usuario, no como root"
-command -v sudo >/dev/null 2>&1 || die "falta sudo"
+[ "$(id -u)" -ne 0 ] || die "run as your user, not as root"
+command -v sudo >/dev/null 2>&1 || die "sudo is missing"
 
-# sin preguntas: no mostrar PKGBUILD ni confirmar cada paquete, compilar con todos los nucores, sudo una sola vez
+# no prompts: no PKGBUILD review or per-package confirmation, build with all cores, sudo asked once
 export PORPHYX_ASSUME_YES="${PORPHYX_ASSUME_YES:-1}"
 export MAKEFLAGS="${MAKEFLAGS:--j$(nproc)}"
 sudo -v
@@ -17,16 +17,16 @@ sudo -v
 SUDO_KEEP=$!
 trap 'kill "$SUDO_KEEP" 2>/dev/null || true' EXIT
 
-echo "== Red =="
-# KYU-NET-CHECK: si no hay red, abre nmtui para conectar y vuelve a probar
+echo "== Network =="
+# KYU-NET-CHECK: without network, open nmtui to connect and retry
 if ! ping -c1 -W5 archlinux.org >/dev/null 2>&1; then
-  echo "Sin conexion. Conectate para continuar."
+  echo "No connection. Connect to continue."
   command -v nmtui >/dev/null 2>&1 && nmtui
-  ping -c1 -W5 archlinux.org >/dev/null 2>&1 || die "sin internet; conectate (nmtui) y vuelve a correr: porphyx setup"
+  ping -c1 -W5 archlinux.org >/dev/null 2>&1 || die "no internet; connect (nmtui) and run porphyx setup again"
 fi
 echo "ok"
 
-echo "== Paquetes oficiales =="
+echo "== Official packages =="
 mapfile -t PKGS < <(sed "s/#.*//" "$HERE/official-packages.txt" | tr -s " \t" "\n" | grep -v "^$")
 # KYU-APPS: optional apps by category (categories.conf)
 . "$HERE/select-apps.sh"
@@ -40,48 +40,48 @@ if [ "$NOCT" = 1 ]; then mapfile -t -O "${#PKGS[@]}" PKGS < <(sed "s/#.*//" "$HE
 # multilib (steam/wine)
 if ! grep -q '^\[multilib\]' /etc/pacman.conf; then
   sudo sed -i '/^#\[multilib\]/,/^#Include/ s/^#//' /etc/pacman.conf
-  grep -q '^\[multilib\]' /etc/pacman.conf || { echo "ERROR: no se pudo habilitar multilib" >&2; exit 1; }
+  grep -q '^\[multilib\]' /etc/pacman.conf || { echo "ERROR: could not enable multilib" >&2; exit 1; }
 fi
 sudo pacman -Syu --needed --noconfirm base-devel git less xdg-utils desktop-file-utils "${PKGS[@]}" "${SEL[@]}" "${DE_PKGS[@]}"
-sudo systemctl enable --now fstrim.timer paccache.timer || echo "AVISO: no se pudieron habilitar los timers" >&2
+sudo systemctl enable --now fstrim.timer paccache.timer || echo "WARNING: could not enable the timers" >&2
 
-echo "== Umbriel (repo precompilado [porphyx]; si falla, se compila del AUR) =="
+echo "== Umbriel (prebuilt [porphyx] repo; if it fails, built from AUR) =="
 if ! grep -q '^\[porphyx\]' /etc/pacman.conf; then
   printf '\n[porphyx]\nSigLevel = Optional TrustAll\nServer = https://github.com/kyulovesfc/porphyx/releases/download/repo\n' | sudo tee -a /etc/pacman.conf >/dev/null
 fi
 if [ "$DE_CHOICE" = umbriel ] && ! sudo pacman -Sy --needed --noconfirm umbriel-git xdg-desktop-portal-umbriel-git; then
-  echo "AVISO: repo precompilado no disponible, se compila del AUR" >&2
-  bash "$HERE/aur-install.sh" xdg-desktop-portal-umbriel-git || die "xdg-desktop-portal-umbriel-git no se instalo; umbriel-git lo necesita"
-  bash "$HERE/aur-install.sh" umbriel-git || die "umbriel-git no se instalo; sin el no hay sesion"
+  echo "WARNING: prebuilt repo not available, building from AUR" >&2
+  bash "$HERE/aur-install.sh" xdg-desktop-portal-umbriel-git || die "xdg-desktop-portal-umbriel-git not installed; umbriel-git needs it"
+  bash "$HERE/aur-install.sh" umbriel-git || die "umbriel-git not installed; there is no session without it"
 fi
 if [ "$NOCT" = 1 ]; then
-  sudo pacman -S --needed --noconfirm luciole-git lavat oh-my-zsh-git zsh-theme-powerlevel10k-git || echo "AVISO: luciole-git/lavat no estan en el repo precompilado, se intentan del AUR" >&2
+  sudo pacman -S --needed --noconfirm luciole-git lavat oh-my-zsh-git zsh-theme-powerlevel10k-git || echo "WARNING: luciole-git/lavat are not in the prebuilt repo, trying AUR" >&2
 fi
-echo "== Flatpak (usuario) =="
-flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo || echo "AVISO: no se pudo agregar flathub" >&2
+echo "== Flatpak (user) =="
+flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo || echo "WARNING: could not add flathub" >&2
 for a in io.mrarm.mcpelauncher org.vinegarhq.Sober org.vinegarhq.Vinegar; do
-  flatpak install --user -y --noninteractive flathub "$a" || echo "AVISO: $a no se instalo" >&2
+  flatpak install --user -y --noninteractive flathub "$a" || echo "WARNING: $a not installed" >&2
 done
-echo "== AUR: resto =="
+echo "== AUR: rest =="
 for p in oh-my-zsh-git zsh-theme-powerlevel10k-git lavat tty-clock zen-browser-bin luciole-git shelly-bin shelly-flatpak-backend-bin heroic-games-launcher-bin artcraft-launcher pear-desktop-bin; do
   case "$DE_CHOICE:$p" in
     umbriel:*|labwc:*) ;;
     *:oh-my-zsh-git|*:zsh-theme-powerlevel10k-git|*:lavat|*:tty-clock|*:luciole-git) continue ;;
   esac
-  bash "$HERE/aur-install.sh" "$p" || echo "AVISO: $p no se instalo" >&2
+  bash "$HERE/aur-install.sh" "$p" || echo "WARNING: $p not installed" >&2
 done
 
-# install.sh llama a paru y a pacman -S paru (CachyOS); en Arch puro paru no existe: shim que usa aur-install.sh
+# install.sh calls paru and pacman -S paru (CachyOS); on plain Arch paru does not exist: a shim that uses aur-install.sh
 TMPBIN="$(mktemp -d)"
 trap 'rm -rf "$TMPBIN"' EXIT
 {
   printf '\043\041/usr/bin/env bash\n'
   printf 'args=()\nfor a in "$@"; do case "$a" in -*) ;; *) args+=("$a") ;; esac; done\n'
-  printf 'bash "%s/aur-install.sh" "${args[@]}" || echo "AVISO: aur-install fallo (se continua)" >&2\nexit 0\n' "$HERE"
+  printf 'bash "%s/aur-install.sh" "${args[@]}" || echo "WARNING: aur-install failed (continuing)" >&2\nexit 0\n' "$HERE"
 } > "$TMPBIN/paru"
 chmod +x "$TMPBIN/paru"
 
-echo "== Dotfiles, Noctalia y Umbriel (install.sh) =="
+echo "== Dotfiles, Noctalia and Umbriel (install.sh) =="
 if [ "$NOCT" = 1 ]; then
   PORPHYX_SESSION="$DE_CHOICE" PATH="$TMPBIN:$PATH" bash "$REPO/install.sh"
 else
@@ -97,4 +97,4 @@ else
   sudo systemctl enable "$DE_DM_SERVICE"
 fi
 
-echo "✓ porphyx setup terminado — reinicia para entrar por el greeter"
+echo "✓ porphyx setup finished — reboot to log in through the greeter"

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# install.sh — despliegue de dotfiles y entorno Noctalia/Umbriel de Porphyx (Arch).
-# Uso: clonar el repo y correr ./install.sh desde su raíz.
+# install.sh — deploys the Porphyx dotfiles and the Noctalia/Umbriel environment (Arch).
+# Usage: clone the repo and run ./install.sh from its root.
 set -Eeuo pipefail
-trap 'echo "ERROR: línea $LINENO: $BASH_COMMAND" >&2' ERR
+trap 'echo "ERROR: line $LINENO: $BASH_COMMAND" >&2' ERR
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 backup_and_copy() {
@@ -17,16 +17,16 @@ backup_and_copy() {
   fi
 }
 
-echo "== Tema de cursor =="
+echo "== Cursor theme =="
 # El tema y el tamaño los define config/umbriel/config.toml ([input.cursor]).
 # El cursor Skyrim se copia mas abajo (assets/cursors).
 
-echo "== Config Noctalia =="
+echo "== Noctalia config =="
 # La config es noctalia-full-config.toml mas el overlay zz-porphyx.toml (se despliegan abajo).
 # Noctalia fusiona todos los *.toml de ~/.config/noctalia/: un config.toml suelto se mezclaria con la full-config.
 if [ -f "$HOME/.config/noctalia/config.toml" ]; then
-  echo "AVISO: ~/.config/noctalia/config.toml existe y Noctalia lo fusiona con noctalia-full-config.toml." >&2
-  echo "       Si es un resto de una instalacion anterior, muevelo fuera de esa carpeta (p. ej. a config.toml.old)." >&2
+  echo "WARNING: ~/.config/noctalia/config.toml exists and Noctalia merges it with noctalia-full-config.toml." >&2
+  echo "       If it is left over from a previous install, move it out of that folder (e.g. to config.toml.old)." >&2
 fi
 
 # KYU-PALETTE-INSTALL
@@ -42,8 +42,8 @@ cur_get() { awk -v k="$1" '/^\[input\.cursor\]/{f=1;next} /^\[/{f=0} f && $1==k 
 CUR_THEME=$(cur_get theme 2>/dev/null || true); CUR_SIZE=$(cur_get size 2>/dev/null || true)
 if command -v gsettings >/dev/null 2>&1 && [ -n "$CUR_THEME" ]; then
   gset() { if [ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ]; then gsettings set "$@"; else dbus-run-session -- gsettings set "$@"; fi; }
-  gset org.gnome.desktop.interface cursor-theme "$CUR_THEME" || echo "AVISO: no se pudo fijar el cursor GTK" >&2
-  [ -n "$CUR_SIZE" ] && { gset org.gnome.desktop.interface cursor-size "$CUR_SIZE" || echo "AVISO: no se pudo fijar el tamano del cursor GTK" >&2; }
+  gset org.gnome.desktop.interface cursor-theme "$CUR_THEME" || echo "WARNING: could not set the GTK cursor" >&2
+  [ -n "$CUR_SIZE" ] && { gset org.gnome.desktop.interface cursor-size "$CUR_SIZE" || echo "WARNING: could not set the GTK cursor size" >&2; }
 fi
 # KYU-ASSETS
 # Fondos y avatar en ~/Pictures/Wallpapers (ruta fija en ingles); las imagenes vienen en config/wallpapers.
@@ -67,7 +67,7 @@ sed -i "s|/home/kyu/|$HOME/|g" "$HOME/.config/noctalia/noctalia-full-config.toml
 backup_and_copy "$REPO_DIR/config/noctalia/zz-porphyx.toml" "$HOME/.config/noctalia/zz-porphyx.toml"
 sed -i "s|\"HOME/|\"$HOME/|g" "$HOME/.config/noctalia/zz-porphyx.toml"
 if grep -q '"HOME/' "$HOME/.config/noctalia/zz-porphyx.toml"; then
-  echo "ERROR: placeholders sin sustituir en zz-porphyx.toml" >&2
+  echo "ERROR: unreplaced placeholders in zz-porphyx.toml" >&2
   exit 1
 fi
 
@@ -79,7 +79,7 @@ backup_and_copy "$REPO_DIR/config/environment.d/10-path.conf" "$HOME/.config/env
 
 
 # Pantalla de bloqueo compacta: el layout va por nombre de salida, se genera una entrada por monitor conectado.
-python3 - "$REPO_DIR/config/noctalia/lockscreen-widgets.toml" "$HOME/.config/noctalia/zz-lockscreen.toml" <<'GENEOF' || { echo "ERROR: no se pudo generar zz-lockscreen.toml" >&2; exit 1; }
+python3 - "$REPO_DIR/config/noctalia/lockscreen-widgets.toml" "$HOME/.config/noctalia/zz-lockscreen.toml" <<'GENEOF' || { echo "ERROR: could not generate zz-lockscreen.toml" >&2; exit 1; }
 import glob, os, re, sys, tomllib
 tpl = open(sys.argv[1]).read()
 outs = []
@@ -104,38 +104,38 @@ os.makedirs(os.path.dirname(sys.argv[2]), exist_ok=True)
 open(sys.argv[2], 'w').write(out)
 GENEOF
 
-echo "== Gestor de archivos (Luciole) + iconos Papirus =="
+echo "== File manager (Luciole) + Papirus icons =="
 LUC=dev.noctalia.luciole.desktop
 if [ -f "/usr/share/applications/$LUC" ]; then
   if [ "$(xdg-mime query default inode/directory)" != "$LUC" ]; then
     xdg-mime default "$LUC" inode/directory
-    echo "inode/directory apunta a Luciole."
+    echo "inode/directory now points to Luciole."
   else
-    echo "inode/directory ya en Luciole, se omite."
+    echo "inode/directory already set to Luciole, skipping."
   fi
 else
-  echo "AVISO: Luciole no esta instalado, no se cambia inode/directory." >&2
+  echo "WARNING: Luciole is not installed, inode/directory unchanged." >&2
 fi
 for pkg in papirus-icon-theme; do
   if ! pacman -Qi "$pkg" &>/dev/null; then
     sudo pacman -S --needed --noconfirm "$pkg"
   else
-    echo "$pkg ya instalado, se omite pacman."
+    echo "$pkg already installed, skipping pacman."
   fi
 done
 
 
-echo "== Zsh (paquetes + config + p10k) =="
+echo "== Zsh (packages + config + p10k) =="
 if ! pacman -Qi zsh &>/dev/null; then
   sudo pacman -S --needed --noconfirm zsh
 else
-  echo "zsh ya instalado, se omite pacman."
+  echo "zsh already installed, skipping pacman."
 fi
 # KYU-ZSH-VENDOR
 # Se despliega la copia vendorizada del repo
 # (necesita oh-my-zsh-git y zsh-theme-powerlevel10k-git, del repo local porphyx).
 if [ -f /usr/share/cachyos-zsh-config/cachyos-config.zsh ]; then
-  echo "cachyos-config.zsh ya presente, se omite."
+  echo "cachyos-config.zsh already present, skipping."
 else
   sudo install -Dm644 "$REPO_DIR/config/zsh/cachyos-config.zsh" /usr/share/cachyos-zsh-config/cachyos-config.zsh
 fi
@@ -145,32 +145,32 @@ backup_and_copy "$REPO_DIR/config/zsh/zshrc" "$HOME/.zshrc"
 backup_and_copy "$REPO_DIR/config/zsh/p10k.zsh" "$HOME/.p10k.zsh"
 if [ "$(basename "$SHELL")" != "zsh" ]; then
   sudo chsh -s "$(command -v zsh)" "$USER"
-  echo "shell cambiada a zsh -- toma efecto en el proximo login"
+  echo "shell changed to zsh -- takes effect at next login"
 else
-  echo "zsh ya es la shell por defecto."
+  echo "zsh is already the default shell."
 fi
 
-echo "== Completions de zsh para noctalia =="
+echo "== Zsh completions for noctalia =="
 # Se generan del esquema vivo e incluyen subcomandos de los plugins instalados.
 # Regenerar tras instalar/quitar plugins con el mismo comando.
 if command -v noctalia &>/dev/null; then
   mkdir -p "$HOME/.local/share/zsh/site-functions"
   if noctalia completions zsh > "$HOME/.local/share/zsh/site-functions/_noctalia" 2>/dev/null \
      && head -1 "$HOME/.local/share/zsh/site-functions/_noctalia" | grep -q "^#compdef noctalia"; then
-    echo "completions instaladas."
+    echo "completions installed."
   else
     rm -f "$HOME/.local/share/zsh/site-functions/_noctalia"
-    echo "WARN: noctalia completions fallo, se omite." >&2
+    echo "WARN: noctalia completions failed, skipping." >&2
   fi
 else
-  echo "WARN: noctalia no encontrado, se omiten completions." >&2
+  echo "WARN: noctalia not found, skipping completions." >&2
 fi
 
-echo "== Foot (paquete + config + tema Noctalia) =="
+echo "== Foot (package + config + Noctalia theme) =="
 if ! pacman -Qi foot &>/dev/null; then
   sudo pacman -S --needed --noconfirm foot
 else
-  echo "foot ya instalado, se omite pacman."
+  echo "foot already installed, skipping pacman."
 fi
 backup_and_copy "$REPO_DIR/config/foot" "$HOME/.config/foot"
 # KYU-FOOT-SEED: tema inicial; noctalia lo regenera. Sin el, foot falla si noctalia aun no lo genero.
@@ -182,7 +182,7 @@ echo "== Zen Browser =="
 if ! pacman -Qi zen-browser-bin &>/dev/null; then
   sudo pacman -S --needed --noconfirm zen-browser-bin
 else
-  echo "zen-browser-bin ya instalado, se omite pacman."
+  echo "zen-browser-bin already installed, skipping pacman."
 fi
 
 systemctl --user daemon-reload
@@ -190,10 +190,10 @@ systemctl --user daemon-reload
 need_paru() { command -v paru >/dev/null 2>&1 || sudo pacman -S --needed --noconfirm paru; }
 PORPHYX_SESSION="${PORPHYX_SESSION:-umbriel}"
 if [ "$PORPHYX_SESSION" = umbriel ]; then
-echo "== Umbriel (compositor principal) =="
+echo "== Umbriel (main compositor) =="
 for pkg in umbriel-git xdg-desktop-portal-umbriel-git; do
   if pacman -Qi "$pkg" &>/dev/null; then
-    echo "$pkg ya instalado, se omite."
+    echo "$pkg already installed, skipping."
   else
     need_paru; paru -S --needed --noconfirm --skipreview "$pkg"
   fi
@@ -214,35 +214,35 @@ done
 umbriel_out=$(umbriel config validate 2>&1 || true)
 if printf '%s\n' "$umbriel_out" | grep -q 'follows_mouse'; then
   sed -i -E 's/^([[:space:]]*follows_mouse[[:space:]]*=[[:space:]]*)true/\1"always"/; s/^([[:space:]]*follows_mouse[[:space:]]*=[[:space:]]*)false/\1"off"/' "$HOME/.config/umbriel/config.toml"
-  echo "config.toml: follows_mouse convertido al esquema nuevo de umbriel."
+  echo "config.toml: follows_mouse converted to the new umbriel schema."
 fi
 umbriel config validate
 fi
 
 # KYU-PRINCIPAL-UMBRIEL
-echo "== Umbriel como entorno principal =="
+echo "== Umbriel as the main desktop =="
 _otros=()
 for _pkg in niri hyprland sway river labwc plasma-desktop plasma-workspace gnome-shell gnome-session xfce4-session cosmic-session cinnamon budgie-desktop mate-session-manager lxqt-session i3-wm bspwm awesome openbox qtile; do
   pacman -Qq "$_pkg" >/dev/null 2>&1 && _otros+=("$_pkg")
 done
 if [ "$PORPHYX_SESSION" = umbriel ] && [ "${#_otros[@]}" -gt 0 ]; then
-  echo "Otros entornos o compositores instalados: ${_otros[*]}"
+  echo "Other desktops or compositors installed: ${_otros[*]}"
   if [ -r /dev/tty ]; then
-    read -r -p "Eliminarlos y dejar Umbriel como principal? [s/N] " _resp </dev/tty
+    read -r -p "Remove them and keep Umbriel as the main desktop? [y/N] " _resp </dev/tty
   else
     _resp=n
   fi
   case "$_resp" in
     s|S|y|Y) sudo pacman -Rns "${_otros[@]}" </dev/tty ;;
-    *) echo "Se conservan." ;;
+    *) echo "Keeping them." ;;
   esac
 else
-  echo "Sin cambios en otros entornos instalados."
+  echo "No other desktops changed."
 fi
 
 # KYU-LABWC
 if [ "$PORPHYX_SESSION" = labwc ]; then
-  echo "== Labwc (config + autostart de Noctalia) =="
+  echo "== Labwc (config + Noctalia autostart) =="
   backup_and_copy "$REPO_DIR/config/labwc" "$HOME/.config/labwc"
   if [ -n "$CUR_THEME" ]; then
     printf 'XCURSOR_THEME=%s\nXCURSOR_SIZE=%s\n' "$CUR_THEME" "${CUR_SIZE:-24}" > "$HOME/.config/labwc/environment"
@@ -250,12 +250,12 @@ if [ "$PORPHYX_SESSION" = labwc ]; then
 fi
 
 # KYU-POWERKEY
-echo "== Boton de apagado (bloquear + suspender) =="
+echo "== Power button (lock + suspend) =="
 sudo install -Dm644 "$REPO_DIR/logind/50-porphyx-powerkey.conf" /etc/systemd/logind.conf.d/50-porphyx-powerkey.conf
 sudo systemctl kill -s HUP systemd-logind
 
 # KYU-TERMINAL-APPS
-echo "== Apps de terminal (cava, cmatrix, lavat, tty-clock, playerctl) =="
+echo "== Terminal apps (cava, cmatrix, lavat, tty-clock, playerctl) =="
 for pkg in cava cmatrix playerctl; do
   pacman -Qi "$pkg" &>/dev/null || sudo pacman -S --needed --noconfirm "$pkg"
 done
@@ -266,7 +266,7 @@ mkdir -p "$HOME/.config/cava"
 grep -q '^\[input\]' "$HOME/.config/cava/config" || printf '\n[input]\nmethod = pulse\nsource = auto\n' >> "$HOME/.config/cava/config"
 # KYU-LAVAT
 pacman -Qi lavat &>/dev/null || { need_paru; paru -S --needed --noconfirm --skipreview lavat; }
-pacman -Qi tty-clock &>/dev/null || { need_paru; paru -S --needed --noconfirm --skipreview tty-clock || echo "AVISO: tty-clock no se instalo" >&2; }
+pacman -Qi tty-clock &>/dev/null || { need_paru; paru -S --needed --noconfirm --skipreview tty-clock || echo "WARNING: tty-clock not installed" >&2; }
 for f in "$REPO_DIR"/config/applications/porphyx-*.desktop; do
   backup_and_copy "$f" "$HOME/.local/share/applications/$(basename "$f")"
 done
@@ -286,7 +286,7 @@ if [ -x /usr/bin/luciole ]; then
   printf '[D-BUS Service]\nName=org.freedesktop.FileManager1\nExec=/usr/bin/luciole --file-manager-service\n' > "$HOME/.local/share/dbus-1/services/org.freedesktop.FileManager1.service"
 fi
 
-echo "== Fastfetch (logo y config del sistema) =="
+echo "== Fastfetch (system logo and config) =="
 FF_SRC="$REPO_DIR/iso/overlay/airootfs/root/.config/fastfetch"
 if [ -f "$FF_SRC/config.jsonc" ] && [ -f "$FF_SRC/logo.txt" ]; then
   sudo install -Dm644 "$FF_SRC/logo.txt" /etc/xdg/fastfetch/logo.txt
@@ -302,4 +302,4 @@ for f in "$REPO_DIR"/bin/*; do
   chmod +x "$HOME/.local/bin/$(basename "$f")"
 done
 
-echo "✓ terminado — haz logout/login y elige Umbriel para que todo tome efecto"
+echo "✓ done — log out and back in, then pick Umbriel for everything to take effect"
