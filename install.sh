@@ -180,7 +180,7 @@ mkdir -p "$HOME/.config/foot/themes"
 
 echo "== Zen Browser =="
 if ! pacman -Qi zen-browser-bin &>/dev/null; then
-  sudo pacman -S --needed --noconfirm zen-browser-bin
+  echo "Zen Browser not selected, skipping."
 else
   echo "zen-browser-bin already installed, skipping pacman."
 fi

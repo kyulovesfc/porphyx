@@ -31,6 +31,10 @@ mapfile -t PKGS < <(sed "s/#.*//" "$HERE/official-packages.txt" | tr -s " \t" "\
 # KYU-APPS: optional apps by category (categories.conf)
 . "$HERE/select-apps.sh"
 select_apps
+# KYU-AUR-APPS: entries prefixed with aur: in categories.conf are built from the AUR
+SEL_AUR=(); _off=()
+for _p in "${SEL[@]}"; do case "$_p" in aur:*) SEL_AUR+=("${_p#aur:}") ;; *) _off+=("$_p") ;; esac; done
+SEL=("${_off[@]}")
 # KYU-DESKTOP: choose the desktop environment (desktops.conf); Umbriel + Noctalia is the default
 . "$HERE/select-desktop.sh"
 select_desktop
@@ -63,11 +67,15 @@ for a in io.mrarm.mcpelauncher org.vinegarhq.Sober org.vinegarhq.Vinegar; do
   flatpak install --user -y --noninteractive flathub "$a" || echo "WARNING: $a not installed" >&2
 done
 echo "== AUR: rest =="
-for p in oh-my-zsh-git zsh-theme-powerlevel10k-git lavat tty-clock zen-browser-bin luciole-git shelly-bin shelly-flatpak-backend-bin heroic-games-launcher-bin artcraft-launcher pear-desktop-bin; do
+for p in oh-my-zsh-git zsh-theme-powerlevel10k-git lavat tty-clock luciole-git shelly-bin shelly-flatpak-backend-bin heroic-games-launcher-bin artcraft-launcher pear-desktop-bin; do
   case "$DE_CHOICE:$p" in
     umbriel:*|labwc:*) ;;
     *:oh-my-zsh-git|*:zsh-theme-powerlevel10k-git|*:lavat|*:tty-clock|*:luciole-git) continue ;;
   esac
+  bash "$HERE/aur-install.sh" "$p" || echo "WARNING: $p not installed" >&2
+done
+
+for p in "${SEL_AUR[@]}"; do
   bash "$HERE/aur-install.sh" "$p" || echo "WARNING: $p not installed" >&2
 done
 
