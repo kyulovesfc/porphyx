@@ -95,7 +95,9 @@ else
   echo "Vanilla desktop: Porphyx dotfiles skipped."
 fi
 
-if [ -z "$DE_DM_SERVICE" ]; then
+if [ "${#DE_LIST[@]}" -eq 0 ]; then
+  echo "No desktop selected: login screen left as is."
+elif [ -z "$DE_DM_SERVICE" ]; then
   echo "== noctalia-greeter =="
   bash "$REPO/greeter-setup/install-greeter.sh"
 else

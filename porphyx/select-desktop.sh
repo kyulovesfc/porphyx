@@ -18,6 +18,7 @@ select_desktop() {
     read -ra req <<< "${PORPHYX_DESKTOP//,/ }"
     ord=()
     for id in "${req[@]}"; do
+      if [ "$id" = none ]; then continue; fi
       if [ -z "${N[$id]:-}" ]; then echo "Unknown desktop '$id', skipped" >&2; continue; fi
       case " ${ord[*]:-} " in *" $id "*) ;; *) ord+=("$id") ;; esac
     done
@@ -39,16 +40,12 @@ select_desktop() {
       menu+=("$id" "[$pos] ${N[$id]}")
     done
     menu+=("done" "Continue with this selection")
-    n=$(( ${#menu[@]} / 2 )); h=$((n + 9))
-    if ! out=$(whiptail --title "Desktop" --default-item "$last" --menu "Enter marks/unmarks a desktop. The number is the order: [1] is the main session (login default), the others are installed as extra sessions." "$h" 78 "$n" "${menu[@]}" 3>&1 1>&2 2>&3); then
+    n=$(( ${#menu[@]} / 2 )); h=$((n + 10))
+    if ! out=$(whiptail --title "Desktop" --default-item "$last" --menu "Enter marks/unmarks a desktop. The number is the order: [1] is the main session (login default), the others are installed as extra sessions. Mark none to skip the desktop." "$h" 78 "$n" "${menu[@]}" 3>&1 1>&2 2>&3); then
       break
     fi
     last="$out"
-    if [ "$out" = done ]; then
-      if [ "${#ord[@]}" -gt 0 ]; then break; fi
-      whiptail --msgbox "Mark at least one desktop." 8 40 || true
-      continue
-    fi
+    if [ "$out" = done ]; then break; fi
     if [[ " ${ord[*]:-} " == *" $out "* ]]; then
       local -a keep=()
       for id in "${ord[@]}"; do if [ "$id" != "$out" ]; then keep+=("$id"); fi; done
@@ -58,7 +55,11 @@ select_desktop() {
     fi
   done
 
-  if [ "${#ord[@]}" -eq 0 ]; then ord=(umbriel); fi
+  if [ "${#ord[@]}" -eq 0 ]; then
+    DE_CHOICE=""
+    echo "No desktop? Alrighty..."
+    return 0
+  fi
   DE_LIST=("${ord[@]}"); DE_CHOICE="${ord[0]}"
   for id in "${ord[@]}"; do
     DE_PKGS+=(${K[$id]:-})
