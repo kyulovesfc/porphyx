@@ -10,6 +10,8 @@ gpu-screen-recorder # plugin de Noctalia (grabacion de pantalla)
 networkmanager bluez bluez-utils pipewire pipewire-pulse wireplumber power-profiles-daemon upower switcheroo-control fwupd keyd evtest cronie zram-generator fuse2 mesa-utils
 btop nvtop fastfetch code kate vlc discord steam wine supertuxkart
 # Imagenes
-loupe
+loupe gimp
+# Video
+kdenlive
 # Fuentes
 otf-opendyslexic-nerd
