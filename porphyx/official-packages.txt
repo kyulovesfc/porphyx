@@ -1,15 +1,12 @@
 # Oficiales de Arch que instala 'porphyx setup' (los de AUR van en porphyx-setup.sh).
 # Sesion, portales y fuentes
-greetd noctalia-greeter noctalia polkit xwayland-satellite xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-gnome gnome-keyring wl-clipboard adw-gtk-theme noto-fonts noto-fonts-emoji grim slurp
+polkit xdg-desktop-portal gnome-keyring noto-fonts noto-fonts-emoji
 # Apps y temas del repo
-foot papirus-icon-theme cava cmatrix playerctl flatpak
+papirus-icon-theme flatpak
 # Zsh
 zsh zoxide eza fzf zsh-autosuggestions zsh-syntax-highlighting zsh-completions zsh-history-substring-search pkgfile powerline-fonts vim
-gpu-screen-recorder # plugin de Noctalia (grabacion de pantalla)
 # Sistema y apps (sync con instalacion real)
 networkmanager bluez bluez-utils pipewire pipewire-pulse wireplumber power-profiles-daemon upower switcheroo-control fwupd keyd evtest cronie zram-generator fuse2 mesa-utils pacman-contrib
 btop nvtop fastfetch
 # Imagenes
 loupe kimageformats qt6-imageformats
-# Fuentes
-otf-opendyslexic-nerd
