@@ -1,9 +1,11 @@
 # select-apps.sh - sourced by porphyx-setup.sh. Fills SEL with the optional packages to install.
 # Data: categories.conf, one app per line: Category|package|Description|default (1 = preselected)
+# Keys may carry a source prefix (aur: or flatpak:); the menu shows them without it.
 select_apps() {
   local conf="$HERE/categories.conf" cat pkg desc def out item interactive=1
+  local cols rows w h lh n tagmax descmax tag
   local -a cats=() list=()
-  local -A items=()
+  local -A items=() tagmap=()
   SEL=()
   while IFS='|' read -r cat pkg desc def; do
     case "${cat:-}" in ''|'#'*) continue ;; esac
@@ -34,16 +36,24 @@ select_apps() {
     fi
   fi
 
+  cols=$(tput cols 2>/dev/null || echo 100); rows=$(tput lines 2>/dev/null || echo 30)
   for cat in "${cats[@]}"; do
     if [ "$interactive" = 0 ]; then _cat_defaults "$cat"; continue; fi
-    list=()
+    list=(); tagmap=(); n=0; tagmax=0; descmax=0
     while IFS='|' read -r pkg desc def; do
       [ -n "$pkg" ] || continue
-      if [ "$def" = 1 ]; then list+=("$pkg" "$desc" ON); else list+=("$pkg" "$desc" OFF); fi
+      tag="${pkg#aur:}"; tag="${tag#flatpak:}"
+      tagmap[$tag]="$pkg"; n=$((n + 1))
+      [ "${#tag}" -gt "$tagmax" ] && tagmax=${#tag}
+      [ "${#desc}" -gt "$descmax" ] && descmax=${#desc}
+      if [ "$def" = 1 ]; then list+=("$tag" "$desc" ON); else list+=("$tag" "$desc" OFF); fi
     done <<< "${items[$cat]}"
-    if out=$(whiptail --separate-output --title "$cat" --checklist "Space selects, Enter confirms" 20 76 10 "${list[@]}" 3>&1 1>&2 2>&3); then
+    w=$((tagmax + descmax + 16)); [ "$w" -lt 60 ] && w=60; [ "$w" -gt $((cols - 4)) ] && w=$((cols - 4))
+    lh=$n; [ "$lh" -gt 15 ] && lh=15
+    h=$((lh + 8)); [ "$h" -gt $((rows - 2)) ] && h=$((rows - 2))
+    if out=$(whiptail --separate-output --title "$cat" --checklist "Space selects, Enter confirms" "$h" "$w" "$lh" "${list[@]}" 3>&1 1>&2 2>&3); then
       while IFS= read -r item; do
-        if [ -n "$item" ]; then SEL+=("$item"); fi
+        if [ -n "$item" ]; then SEL+=("${tagmap[$item]:-$item}"); fi
       done <<< "$out"
     else
       _cat_defaults "$cat"
