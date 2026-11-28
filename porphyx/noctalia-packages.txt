@@ -1,0 +1,3 @@
+# Packages for the Noctalia desktops (Umbriel and Labwc); porphyx setup installs them only when one of those is chosen
+greetd noctalia-greeter noctalia xwayland-satellite xdg-desktop-portal-gtk xdg-desktop-portal-gnome wl-clipboard adw-gtk-theme
+grim slurp foot cava cmatrix playerctl gpu-screen-recorder otf-opendyslexic-nerd

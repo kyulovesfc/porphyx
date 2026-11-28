@@ -31,24 +31,32 @@ mapfile -t PKGS < <(sed "s/#.*//" "$HERE/official-packages.txt" | tr -s " \t" "\
 # KYU-APPS: optional apps by category (categories.conf)
 . "$HERE/select-apps.sh"
 select_apps
+# KYU-DESKTOP: choose the desktop environment (desktops.conf); Umbriel + Noctalia is the default
+. "$HERE/select-desktop.sh"
+select_desktop
+NOCT=0
+case "$DE_CHOICE" in umbriel|labwc) NOCT=1 ;; esac
+if [ "$NOCT" = 1 ]; then mapfile -t -O "${#PKGS[@]}" PKGS < <(sed "s/#.*//" "$HERE/noctalia-packages.txt" | tr -s " \t" "\n" | grep -v "^$"); fi
 # multilib (steam/wine)
 if ! grep -q '^\[multilib\]' /etc/pacman.conf; then
   sudo sed -i '/^#\[multilib\]/,/^#Include/ s/^#//' /etc/pacman.conf
   grep -q '^\[multilib\]' /etc/pacman.conf || { echo "ERROR: no se pudo habilitar multilib" >&2; exit 1; }
 fi
-sudo pacman -Syu --needed --noconfirm base-devel git less xdg-utils desktop-file-utils "${PKGS[@]}" "${SEL[@]}"
+sudo pacman -Syu --needed --noconfirm base-devel git less xdg-utils desktop-file-utils "${PKGS[@]}" "${SEL[@]}" "${DE_PKGS[@]}"
 sudo systemctl enable --now fstrim.timer paccache.timer || echo "AVISO: no se pudieron habilitar los timers" >&2
 
 echo "== Umbriel (repo precompilado [porphyx]; si falla, se compila del AUR) =="
 if ! grep -q '^\[porphyx\]' /etc/pacman.conf; then
   printf '\n[porphyx]\nSigLevel = Optional TrustAll\nServer = https://github.com/kyulovesfc/porphyx/releases/download/repo\n' | sudo tee -a /etc/pacman.conf >/dev/null
 fi
-if ! sudo pacman -Sy --needed --noconfirm umbriel-git xdg-desktop-portal-umbriel-git; then
+if [ "$DE_CHOICE" = umbriel ] && ! sudo pacman -Sy --needed --noconfirm umbriel-git xdg-desktop-portal-umbriel-git; then
   echo "AVISO: repo precompilado no disponible, se compila del AUR" >&2
   bash "$HERE/aur-install.sh" xdg-desktop-portal-umbriel-git || die "xdg-desktop-portal-umbriel-git no se instalo; umbriel-git lo necesita"
   bash "$HERE/aur-install.sh" umbriel-git || die "umbriel-git no se instalo; sin el no hay sesion"
 fi
-sudo pacman -S --needed --noconfirm luciole-git lavat oh-my-zsh-git zsh-theme-powerlevel10k-git || echo "AVISO: luciole-git/lavat no estan en el repo precompilado, se intentan del AUR" >&2
+if [ "$NOCT" = 1 ]; then
+  sudo pacman -S --needed --noconfirm luciole-git lavat oh-my-zsh-git zsh-theme-powerlevel10k-git || echo "AVISO: luciole-git/lavat no estan en el repo precompilado, se intentan del AUR" >&2
+fi
 echo "== Flatpak (usuario) =="
 flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo || echo "AVISO: no se pudo agregar flathub" >&2
 for a in io.mrarm.mcpelauncher org.vinegarhq.Sober org.vinegarhq.Vinegar; do
@@ -56,6 +64,10 @@ for a in io.mrarm.mcpelauncher org.vinegarhq.Sober org.vinegarhq.Vinegar; do
 done
 echo "== AUR: resto =="
 for p in oh-my-zsh-git zsh-theme-powerlevel10k-git lavat tty-clock zen-browser-bin luciole-git shelly-bin shelly-flatpak-backend-bin heroic-games-launcher-bin artcraft-launcher pear-desktop-bin; do
+  case "$DE_CHOICE:$p" in
+    umbriel:*|labwc:*) ;;
+    *:oh-my-zsh-git|*:zsh-theme-powerlevel10k-git|*:lavat|*:tty-clock|*:luciole-git) continue ;;
+  esac
   bash "$HERE/aur-install.sh" "$p" || echo "AVISO: $p no se instalo" >&2
 done
 
@@ -70,9 +82,19 @@ trap 'rm -rf "$TMPBIN"' EXIT
 chmod +x "$TMPBIN/paru"
 
 echo "== Dotfiles, Noctalia y Umbriel (install.sh) =="
-PATH="$TMPBIN:$PATH" bash "$REPO/install.sh"
+if [ "$NOCT" = 1 ]; then
+  PORPHYX_SESSION="$DE_CHOICE" PATH="$TMPBIN:$PATH" bash "$REPO/install.sh"
+else
+  echo "Vanilla desktop: Porphyx dotfiles skipped."
+fi
 
-echo "== noctalia-greeter =="
-bash "$REPO/greeter-setup/install-greeter.sh"
+if [ -z "$DE_DM_SERVICE" ]; then
+  echo "== noctalia-greeter =="
+  bash "$REPO/greeter-setup/install-greeter.sh"
+else
+  echo "== Login manager ($DE_DM_SERVICE) =="
+  sudo systemctl disable greetd.service 2>/dev/null || true
+  sudo systemctl enable "$DE_DM_SERVICE"
+fi
 
 echo "✓ porphyx setup terminado — reinicia para entrar por el greeter"

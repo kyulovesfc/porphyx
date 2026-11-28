@@ -187,8 +187,10 @@ fi
 
 systemctl --user daemon-reload
 
-echo "== Umbriel (compositor principal) =="
 need_paru() { command -v paru >/dev/null 2>&1 || sudo pacman -S --needed --noconfirm paru; }
+PORPHYX_SESSION="${PORPHYX_SESSION:-umbriel}"
+if [ "$PORPHYX_SESSION" = umbriel ]; then
+echo "== Umbriel (compositor principal) =="
 for pkg in umbriel-git xdg-desktop-portal-umbriel-git; do
   if pacman -Qi "$pkg" &>/dev/null; then
     echo "$pkg ya instalado, se omite."
@@ -215,6 +217,7 @@ if printf '%s\n' "$umbriel_out" | grep -q 'follows_mouse'; then
   echo "config.toml: follows_mouse convertido al esquema nuevo de umbriel."
 fi
 umbriel config validate
+fi
 
 # KYU-PRINCIPAL-UMBRIEL
 echo "== Umbriel como entorno principal =="
@@ -222,7 +225,7 @@ _otros=()
 for _pkg in niri hyprland sway river labwc plasma-desktop plasma-workspace gnome-shell gnome-session xfce4-session cosmic-session cinnamon budgie-desktop mate-session-manager lxqt-session i3-wm bspwm awesome openbox qtile; do
   pacman -Qq "$_pkg" >/dev/null 2>&1 && _otros+=("$_pkg")
 done
-if [ "${#_otros[@]}" -gt 0 ]; then
+if [ "$PORPHYX_SESSION" = umbriel ] && [ "${#_otros[@]}" -gt 0 ]; then
   echo "Otros entornos o compositores instalados: ${_otros[*]}"
   if [ -r /dev/tty ]; then
     read -r -p "Eliminarlos y dejar Umbriel como principal? [s/N] " _resp </dev/tty
@@ -234,7 +237,16 @@ if [ "${#_otros[@]}" -gt 0 ]; then
     *) echo "Se conservan." ;;
   esac
 else
-  echo "No hay otros entornos instalados."
+  echo "Sin cambios en otros entornos instalados."
+fi
+
+# KYU-LABWC
+if [ "$PORPHYX_SESSION" = labwc ]; then
+  echo "== Labwc (config + autostart de Noctalia) =="
+  backup_and_copy "$REPO_DIR/config/labwc" "$HOME/.config/labwc"
+  if [ -n "$CUR_THEME" ]; then
+    printf 'XCURSOR_THEME=%s\nXCURSOR_SIZE=%s\n' "$CUR_THEME" "${CUR_SIZE:-24}" > "$HOME/.config/labwc/environment"
+  fi
 fi
 
 # KYU-POWERKEY
