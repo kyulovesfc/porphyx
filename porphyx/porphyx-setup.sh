@@ -67,7 +67,7 @@ for a in io.mrarm.mcpelauncher org.vinegarhq.Sober org.vinegarhq.Vinegar; do
   flatpak install --user -y --noninteractive flathub "$a" || echo "WARNING: $a not installed" >&2
 done
 echo "== AUR: rest =="
-for p in oh-my-zsh-git zsh-theme-powerlevel10k-git lavat tty-clock luciole-git shelly-bin shelly-flatpak-backend-bin heroic-games-launcher-bin artcraft-launcher pear-desktop-bin; do
+for p in oh-my-zsh-git zsh-theme-powerlevel10k-git lavat tty-clock luciole-git heroic-games-launcher-bin pear-desktop-bin; do
   case "$DE_CHOICE:$p" in
     umbriel:*|labwc:*) ;;
     *:oh-my-zsh-git|*:zsh-theme-powerlevel10k-git|*:lavat|*:tty-clock|*:luciole-git) continue ;;
