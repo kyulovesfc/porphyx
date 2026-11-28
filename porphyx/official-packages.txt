@@ -8,10 +8,8 @@ zsh zoxide eza fzf zsh-autosuggestions zsh-syntax-highlighting zsh-completions z
 gpu-screen-recorder # plugin de Noctalia (grabacion de pantalla)
 # Sistema y apps (sync con instalacion real)
 networkmanager bluez bluez-utils pipewire pipewire-pulse wireplumber power-profiles-daemon upower switcheroo-control fwupd keyd evtest cronie zram-generator fuse2 mesa-utils pacman-contrib
-btop nvtop fastfetch code kate vlc discord steam wine supertuxkart
+btop nvtop fastfetch
 # Imagenes
-loupe gimp kimageformats qt6-imageformats
-# Video
-kdenlive
+loupe kimageformats qt6-imageformats
 # Fuentes
 otf-opendyslexic-nerd

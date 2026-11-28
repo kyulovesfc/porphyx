@@ -28,12 +28,15 @@ echo "ok"
 
 echo "== Paquetes oficiales =="
 mapfile -t PKGS < <(sed "s/#.*//" "$HERE/official-packages.txt" | tr -s " \t" "\n" | grep -v "^$")
+# KYU-APPS: optional apps by category (categories.conf)
+. "$HERE/select-apps.sh"
+select_apps
 # multilib (steam/wine)
 if ! grep -q '^\[multilib\]' /etc/pacman.conf; then
   sudo sed -i '/^#\[multilib\]/,/^#Include/ s/^#//' /etc/pacman.conf
   grep -q '^\[multilib\]' /etc/pacman.conf || { echo "ERROR: no se pudo habilitar multilib" >&2; exit 1; }
 fi
-sudo pacman -Syu --needed --noconfirm base-devel git less xdg-utils desktop-file-utils "${PKGS[@]}"
+sudo pacman -Syu --needed --noconfirm base-devel git less xdg-utils desktop-file-utils "${PKGS[@]}" "${SEL[@]}"
 sudo systemctl enable --now fstrim.timer paccache.timer || echo "AVISO: no se pudieron habilitar los timers" >&2
 
 echo "== Umbriel (repo precompilado [porphyx]; si falla, se compila del AUR) =="
