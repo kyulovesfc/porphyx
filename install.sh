@@ -37,6 +37,14 @@ for d in "$REPO_DIR"/assets/cursors/*/; do
   [ -d "$d" ] || continue
   [ -e "$HOME/.local/share/icons/$(basename "$d")" ] || cp -r "$d" "$HOME/.local/share/icons/"
 done
+# KYU-GTK-CURSOR: GTK/libadwaita leen el cursor de gsettings (no de XCURSOR_THEME); tema y tamano salen de config/umbriel/config.toml
+cur_get() { awk -v k="$1" '/^\[input\.cursor\]/{f=1;next} /^\[/{f=0} f && $1==k {gsub(/[" ]/,"",$3); print $3; exit}' "$REPO_DIR/config/umbriel/config.toml"; }
+CUR_THEME=$(cur_get theme 2>/dev/null || true); CUR_SIZE=$(cur_get size 2>/dev/null || true)
+if command -v gsettings >/dev/null 2>&1 && [ -n "$CUR_THEME" ]; then
+  gset() { if [ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ]; then gsettings set "$@"; else dbus-run-session -- gsettings set "$@"; fi; }
+  gset org.gnome.desktop.interface cursor-theme "$CUR_THEME" || echo "AVISO: no se pudo fijar el cursor GTK" >&2
+  [ -n "$CUR_SIZE" ] && { gset org.gnome.desktop.interface cursor-size "$CUR_SIZE" || echo "AVISO: no se pudo fijar el tamano del cursor GTK" >&2; }
+fi
 # KYU-ASSETS
 # Fondos y avatar en ~/Pictures/Wallpapers (ruta fija en ingles); las imagenes vienen en config/wallpapers.
 mkdir -p "$HOME/Pictures/Wallpapers"
