@@ -34,6 +34,7 @@ if ! grep -q '^\[multilib\]' /etc/pacman.conf; then
   grep -q '^\[multilib\]' /etc/pacman.conf || { echo "ERROR: no se pudo habilitar multilib" >&2; exit 1; }
 fi
 sudo pacman -Syu --needed --noconfirm base-devel git less xdg-utils desktop-file-utils "${PKGS[@]}"
+sudo systemctl enable --now fstrim.timer paccache.timer || echo "AVISO: no se pudieron habilitar los timers" >&2
 
 echo "== Umbriel (repo precompilado [porphyx]; si falla, se compila del AUR) =="
 if ! grep -q '^\[porphyx\]' /etc/pacman.conf; then
