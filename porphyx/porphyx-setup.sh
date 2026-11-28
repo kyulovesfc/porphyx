@@ -39,7 +39,7 @@ SEL=("${_off[@]}")
 . "$HERE/select-desktop.sh"
 select_desktop
 NOCT=0
-case "$DE_CHOICE" in umbriel|labwc) NOCT=1 ;; esac
+if [ -n "$DE_NOCT_FIRST" ]; then NOCT=1; fi
 if [ "$NOCT" = 1 ]; then mapfile -t -O "${#PKGS[@]}" PKGS < <(sed "s/#.*//" "$HERE/noctalia-packages.txt" | tr -s " \t" "\n" | grep -v "^$"); fi
 # multilib (steam/wine)
 if ! grep -q '^\[multilib\]' /etc/pacman.conf; then
@@ -53,7 +53,7 @@ echo "== Umbriel (prebuilt [porphyx] repo; if it fails, built from AUR) =="
 if ! grep -q '^\[porphyx\]' /etc/pacman.conf; then
   printf '\n[porphyx]\nSigLevel = Optional TrustAll\nServer = https://github.com/kyulovesfc/porphyx/releases/download/repo\n' | sudo tee -a /etc/pacman.conf >/dev/null
 fi
-if [ "$DE_CHOICE" = umbriel ] && ! sudo pacman -Sy --needed --noconfirm umbriel-git xdg-desktop-portal-umbriel-git; then
+if [ "$DE_HAS_UMBRIEL" = 1 ] && ! sudo pacman -Sy --needed --noconfirm umbriel-git xdg-desktop-portal-umbriel-git; then
   echo "WARNING: prebuilt repo not available, building from AUR" >&2
   bash "$HERE/aur-install.sh" xdg-desktop-portal-umbriel-git || die "xdg-desktop-portal-umbriel-git not installed; umbriel-git needs it"
   bash "$HERE/aur-install.sh" umbriel-git || die "umbriel-git not installed; there is no session without it"
@@ -68,10 +68,9 @@ for a in "${SEL_FLAT[@]}"; do
 done
 echo "== AUR: rest =="
 for p in oh-my-zsh-git zsh-theme-powerlevel10k-git lavat tty-clock luciole-git heroic-games-launcher-bin pear-desktop-bin; do
-  case "$DE_CHOICE:$p" in
-    umbriel:*|labwc:*) ;;
-    *:oh-my-zsh-git|*:zsh-theme-powerlevel10k-git|*:lavat|*:tty-clock|*:luciole-git) continue ;;
-  esac
+  if [ "$NOCT" != 1 ]; then
+    case "$p" in oh-my-zsh-git|zsh-theme-powerlevel10k-git|lavat|tty-clock|luciole-git) continue ;; esac
+  fi
   bash "$HERE/aur-install.sh" "$p" || echo "WARNING: $p not installed" >&2
 done
 
@@ -91,7 +90,7 @@ chmod +x "$TMPBIN/paru"
 
 echo "== Dotfiles, Noctalia and Umbriel (install.sh) =="
 if [ "$NOCT" = 1 ]; then
-  PORPHYX_SESSION="$DE_CHOICE" PATH="$TMPBIN:$PATH" bash "$REPO/install.sh"
+  PORPHYX_SESSIONS="${DE_LIST[*]}" PORPHYX_SESSION="$DE_NOCT_FIRST" PATH="$TMPBIN:$PATH" bash "$REPO/install.sh"
 else
   echo "Vanilla desktop: Porphyx dotfiles skipped."
 fi

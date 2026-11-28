@@ -189,7 +189,11 @@ systemctl --user daemon-reload
 
 need_paru() { command -v paru >/dev/null 2>&1 || sudo pacman -S --needed --noconfirm paru; }
 PORPHYX_SESSION="${PORPHYX_SESSION:-umbriel}"
-if [ "$PORPHYX_SESSION" = umbriel ]; then
+PORPHYX_SESSIONS="${PORPHYX_SESSIONS:-$PORPHYX_SESSION}"
+HAS_UMBRIEL=0; HAS_LABWC=0
+case " $PORPHYX_SESSIONS " in *" umbriel "*) HAS_UMBRIEL=1 ;; esac
+case " $PORPHYX_SESSIONS " in *" labwc "*) HAS_LABWC=1 ;; esac
+if [ "$HAS_UMBRIEL" = 1 ]; then
 echo "== Umbriel (main compositor) =="
 for pkg in umbriel-git xdg-desktop-portal-umbriel-git; do
   if pacman -Qi "$pkg" &>/dev/null; then
@@ -225,7 +229,7 @@ _otros=()
 for _pkg in niri hyprland sway river labwc plasma-desktop plasma-workspace gnome-shell gnome-session xfce4-session cosmic-session cinnamon budgie-desktop mate-session-manager lxqt-session i3-wm bspwm awesome openbox qtile; do
   pacman -Qq "$_pkg" >/dev/null 2>&1 && _otros+=("$_pkg")
 done
-if [ "$PORPHYX_SESSION" = umbriel ] && [ "${#_otros[@]}" -gt 0 ]; then
+if [ "$HAS_UMBRIEL" = 1 ] && [ "${#_otros[@]}" -gt 0 ]; then
   echo "Other desktops or compositors installed: ${_otros[*]}"
   if [ -r /dev/tty ]; then
     read -r -p "Remove them and keep Umbriel as the main desktop? [y/N] " _resp </dev/tty
@@ -241,7 +245,7 @@ else
 fi
 
 # KYU-LABWC
-if [ "$PORPHYX_SESSION" = labwc ]; then
+if [ "$HAS_LABWC" = 1 ]; then
   echo "== Labwc (config + Noctalia autostart) =="
   backup_and_copy "$REPO_DIR/config/labwc" "$HOME/.config/labwc"
   if [ -n "$CUR_THEME" ]; then
