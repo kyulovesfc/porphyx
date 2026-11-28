@@ -32,8 +32,8 @@ mapfile -t PKGS < <(sed "s/#.*//" "$HERE/official-packages.txt" | tr -s " \t" "\
 . "$HERE/select-apps.sh"
 select_apps
 # KYU-AUR-APPS: entries prefixed with aur: in categories.conf are built from the AUR
-SEL_AUR=(); _off=()
-for _p in "${SEL[@]}"; do case "$_p" in aur:*) SEL_AUR+=("${_p#aur:}") ;; *) _off+=("$_p") ;; esac; done
+SEL_AUR=(); SEL_FLAT=(); _off=()
+for _p in "${SEL[@]}"; do case "$_p" in aur:*) SEL_AUR+=("${_p#aur:}") ;; flatpak:*) SEL_FLAT+=("${_p#flatpak:}") ;; *) _off+=("$_p") ;; esac; done
 SEL=("${_off[@]}")
 # KYU-DESKTOP: choose the desktop environment (desktops.conf); Umbriel + Noctalia is the default
 . "$HERE/select-desktop.sh"
@@ -63,7 +63,7 @@ if [ "$NOCT" = 1 ]; then
 fi
 echo "== Flatpak (user) =="
 flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo || echo "WARNING: could not add flathub" >&2
-for a in io.mrarm.mcpelauncher org.vinegarhq.Sober org.vinegarhq.Vinegar; do
+for a in "${SEL_FLAT[@]}"; do
   flatpak install --user -y --noninteractive flathub "$a" || echo "WARNING: $a not installed" >&2
 done
 echo "== AUR: rest =="
